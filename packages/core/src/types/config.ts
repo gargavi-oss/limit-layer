@@ -16,7 +16,17 @@ export interface LimitLayerConfig {
 
   rules: Rule[];
 
-  analytics?: AnalyticsConfig;
+  defaultKeyGenerator?: (request: any) => string | Promise<string>;
 
-  logger?: LoggerConfig;
+  throwOnNoRule?: boolean;
+
+  headers?: boolean;
+
+  logger?: {
+    enabled: boolean;
+  };
+
+  analytics?: {
+    enabled: boolean;
+  };
 }

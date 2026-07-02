@@ -2,12 +2,13 @@ import type { StorageAdapter } from "../types/storage.ts";
 import type { LLRequest } from "../types/request.ts";
 import type { Rule } from "../types/rule.ts";
 import type { DecisionResult } from "../types/result.ts";
-import { getAlgorithm } from "./algorithm-registry.ts";
+import { AlgorithmRegistry } from "./algorithm-registry.ts";
 import { generateKey } from "../utils/generate-key.ts";
 
 export class DecisionEngine {
   constructor(
-    private readonly storage: StorageAdapter
+    private readonly storage: StorageAdapter,
+    private readonly registry: AlgorithmRegistry
   ) {}
 
   async consume(
@@ -21,8 +22,7 @@ await generateKey(request, rule);
 
     const now = Date.now();
 
-    const algorithm = getAlgorithm(rule.algorithm);
-
+    const algorithm = this.registry.get(rule.algorithm);
     const state = await this.storage.get(storageKey);
 
     const result = await algorithm.consume({
