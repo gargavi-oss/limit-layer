@@ -14,6 +14,37 @@ LimitLayer is designed to be fast, extensible, and easy to integrate. It separat
 
 ---
 
+## 🏗️ Architecture
+
+```mermaid
+flowchart TD
+
+    App[Application]
+
+    Express["@limitlayer/express"]
+
+    Core["@limitlayer/core"]
+
+    Engine[Decision Engine]
+
+    Matcher[Rule Matcher]
+
+    Registry[Algorithm Registry]
+
+    Algorithm[Fixed Window Algorithm]
+
+    Store[Memory Store]
+
+    App --> Express
+    Express --> Core
+
+    Core --> Engine
+    Engine --> Matcher
+    Engine --> Registry
+    Registry --> Algorithm
+    Engine --> Store
+```
+
 ## ✨ Features
 
 * ⚡ High-performance TypeScript implementation
