@@ -27,6 +27,8 @@ dist/
 
 coverage/
 
+.turbo/
+
 turbo.json
 
 .env

@@ -166,7 +166,7 @@ app.listen(3000);
 Clone the repository:
 
 ```bash
-git clone https://github.com/<your-username>/limitlayer.git
+git clone https://github.com/gargavi-oss/limitlayer.git
 cd limitlayer
 pnpm install
 ```
