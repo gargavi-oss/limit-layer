@@ -2,6 +2,14 @@
 
 > A modern, framework-agnostic rate limiting library for Node.js and TypeScript.
 
+[![CI](https://github.com/gargavi-oss/limit-layer/actions/workflows/ci.yml/badge.svg)](https://github.com/gargavi-oss/limit-layer/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/@limitlayer/core)](https://www.npmjs.com/package/@limitlayer/core)
+[![npm downloads](https://img.shields.io/npm/dm/@limitlayer/core)](https://www.npmjs.com/package/@limitlayer/core)
+[![License](https://img.shields.io/github/license/gargavi-oss/limit-layer)](LICENSE)
+![TypeScript](https://img.shields.io/badge/TypeScript-5+-3178C6?logo=typescript&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)
+![pnpm](https://img.shields.io/badge/pnpm-11-F69220?logo=pnpm&logoColor=white)
+
 LimitLayer is designed to be fast, extensible, and easy to integrate. It separates the core rate-limiting engine from framework adapters, allowing the same limiter to work across Express today and other frameworks in future releases.
 
 ---
