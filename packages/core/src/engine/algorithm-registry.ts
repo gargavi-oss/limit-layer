@@ -1,26 +1,36 @@
-import type { AlgorithmType } from "../types/rule.ts";
 import type { Algorithm } from "../types/algorithm.ts";
+import type { AlgorithmType } from "../types/rule.ts";
+import { AlgorithmError } from "../errors/index.ts";
 
-export class AlgorithmRegistry {
-  private readonly algorithms = new Map<
-    AlgorithmType,
-    Algorithm<any>
-  >();
+const algorithms = new Map<AlgorithmType, Algorithm<any>>();
 
-  register(
-    name: AlgorithmType,
-    algorithm: Algorithm<any>
-  ) {
-    this.algorithms.set(name, algorithm);
+export function registerAlgorithm(
+  name: AlgorithmType,
+  algorithm: Algorithm<any>
+): void {
+  if (algorithms.has(name)) {
+    throw new AlgorithmError(
+      `Algorithm "${name}" is already registered.`
+    );
   }
 
-  get(name: AlgorithmType) {
-    const algorithm = this.algorithms.get(name);
+  algorithms.set(name, algorithm);
+}
 
-    if (!algorithm) {
-      throw new Error(`Algorithm "${name}" is not registered.`);
-    }
+export function getAlgorithm(
+  name: AlgorithmType
+): Algorithm<any> {
+  const algorithm = algorithms.get(name);
 
-    return algorithm;
+  if (!algorithm) {
+    throw new AlgorithmError(
+      `Algorithm "${name}" is not registered.`
+    );
   }
+
+  return algorithm;
+}
+
+export function clearAlgorithms(): void {
+  algorithms.clear();
 }

@@ -5,7 +5,7 @@ interface MemoryEntry<T> {
   expiresAt?: number;
 }
 
-export class MemoryStore implements StorageAdapter {
+class MemoryStore implements StorageAdapter {
   private readonly store = new Map<string, MemoryEntry<unknown>>();
 
   async get<T>(key: string): Promise<T | null> {
@@ -49,3 +49,5 @@ export class MemoryStore implements StorageAdapter {
     this.store.clear();
   }
 }
+
+export {MemoryStore}
