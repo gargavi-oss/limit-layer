@@ -27,5 +27,24 @@
       "build": "tsup",
       "dev": "tsup --watch",
       "clean": "rm -rf dist"
-    }
+    },
+    "homepage": "https://github.com/limitlayer/limitlayer#readme",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/limitlayer/limitlayer.git"
+    },
+    "bugs": {
+      "url": "https://github.com/limitlayer/limitlayer/issues"
+    },
+    "keywords": [
+      "rate-limit",
+      "rate-limiter",
+      "express",
+      "typescript",
+      "nodejs",
+      "middleware",
+      "api",
+      "backend"
+    ],
+     "license": "MIT"
   }

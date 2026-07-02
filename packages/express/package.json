@@ -36,5 +36,24 @@
     "@types/supertest": "^7.2.0",
     "express": "^5.2.1",
     "supertest": "^7.2.2"
-  }
+  },
+  "homepage": "https://github.com/limitlayer/limitlayer#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/limitlayer/limitlayer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/limitlayer/limitlayer/issues"
+  },
+  "keywords": [
+    "rate-limit",
+    "rate-limiter",
+    "express",
+    "typescript",
+    "nodejs",
+    "middleware",
+    "api",
+    "backend"
+  ],
+   "license": "MIT"
 }
