@@ -2,7 +2,7 @@ import type {
     Algorithm,
     AlgorithmContext,
     AlgorithmResult,
-  } from "../types/algorithm.ts";
+  } from "../types/algorithm.js";
   import type { FixedWindowState } from "../types/state.js";
   import { parseWindow } from "../utils/parse-window.js";
   

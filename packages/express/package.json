@@ -3,11 +3,9 @@
   "version": "0.0.1",
   "description": "Official Express adapter for LimitLayer",
   "type": "module",
-
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -15,27 +13,24 @@
       "require": "./dist/index.cjs"
     }
   },
-
   "files": [
     "dist"
   ],
-
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "clean": "rm -rf dist"
   },
-
   "dependencies": {
     "@limitlayer/core": "workspace:*"
   },
-
   "peerDependencies": {
     "express": "^4.18.0 || ^5.0.0"
   },
-
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "express": "^5.2.1"
+    "@types/supertest": "^7.2.0",
+    "express": "^5.2.1",
+    "supertest": "^7.2.2"
   }
 }

@@ -46,14 +46,14 @@ export class RuleMatcher {
 
     if (rulePath.includes("*")) {
 
-        const regex =
-            new RegExp(
-                "^" +
-                rulePath
-                    .replace(/\*\*/g, ".*")
-                    .replace(/\*/g, "[^/]+") +
-                "$"
-            );
+        const regex = new RegExp(
+            "^" +
+              rulePath
+                .replace(/\*\*/g, "__DOUBLE_WILDCARD__")
+                .replace(/\*/g, "[^/]+")
+                .replace(/__DOUBLE_WILDCARD__/g, ".*") +
+              "$"
+          );
 
         return regex.test(requestPath);
 
