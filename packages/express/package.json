@@ -1,6 +1,10 @@
 {
   "name": "@limitlayer/express",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.0",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Official Express adapter for LimitLayer",
   "type": "module",
   "main": "./dist/index.cjs",

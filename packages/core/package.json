@@ -1,7 +1,11 @@
 {
     "name": "@limitlayer/core",
-    "version": "0.0.1",
+    "private":false,
+    "version": "0.1.0-alpha.0",
     "type": "module",
+    "publishConfig": {
+    "access": "public"
+  },
   
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",
