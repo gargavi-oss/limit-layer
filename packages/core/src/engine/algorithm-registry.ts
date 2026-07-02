@@ -1,4 +1,4 @@
-import type { Algorithm } from "../types/algorithm.ts";
+import type { Algorithm } from "../types/algorithm.js";
 
 export class AlgorithmRegistry {
   private readonly algorithms = new Map<

@@ -1,4 +1,4 @@
-import { LimitLayerError } from "./index.ts";
+import { LimitLayerError } from "./index.js";
 
 export class NoMatchingRuleError extends LimitLayerError {
     constructor(path: string) {

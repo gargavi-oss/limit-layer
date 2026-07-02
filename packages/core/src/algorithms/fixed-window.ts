@@ -3,8 +3,8 @@ import type {
     AlgorithmContext,
     AlgorithmResult,
   } from "../types/algorithm.ts";
-  import type { FixedWindowState } from "../types/state.ts";
-  import { parseWindow } from "../utils/parse-window.ts";
+  import type { FixedWindowState } from "../types/state.js";
+  import { parseWindow } from "../utils/parse-window.js";
   
   export class FixedWindowAlgorithm
     implements Algorithm<FixedWindowState>

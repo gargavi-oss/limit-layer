@@ -1,1 +1,1 @@
-export * from "./fixed-window.ts"
+export * from "./fixed-window.js"

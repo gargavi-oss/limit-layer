@@ -1,6 +1,6 @@
-import type { Rule } from "./rule.ts";
-import type { LLRequest } from "./request.ts";
-import type { DecisionResult } from "./result.ts";
+import type { Rule } from "./rule.js";
+import type { LLRequest } from "./request.js";
+import type { DecisionResult } from "./result.js";
 
 export interface AlgorithmContext<TState = unknown> {
   request: LLRequest;

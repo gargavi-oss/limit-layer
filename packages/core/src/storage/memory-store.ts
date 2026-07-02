@@ -1,4 +1,4 @@
-import type { StorageAdapter } from "../types/storage.ts";
+import type { StorageAdapter } from "../types/storage.js";
 
 interface MemoryEntry<T> {
   value: T;

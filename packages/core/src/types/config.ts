@@ -1,5 +1,5 @@
-import type { Rule } from "./rule.ts";
-import type { StorageAdapter } from "./storage.ts";
+import type { Rule } from "./rule.js";
+import type { StorageAdapter } from "./storage.js";
 
 export interface AnalyticsConfig {
   enabled?: boolean;

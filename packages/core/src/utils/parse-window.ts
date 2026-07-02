@@ -1,5 +1,5 @@
-import { InvalidTimeWindowError } from "../errors/invalid-window.error.ts";
-import type { TimeWindow } from "../types/rule.ts";
+import { InvalidTimeWindowError } from "../errors/invalid-window.error.js";
+import type { TimeWindow } from "../types/rule.js";
 
 export function parseWindow(window: TimeWindow): number {
   if (typeof window === "number") {

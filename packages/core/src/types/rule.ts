@@ -1,4 +1,4 @@
-import type { LLRequest } from "./request.ts";
+import type { LLRequest } from "./request.js";
 
 export type AlgorithmType =
   | "fixed-window"

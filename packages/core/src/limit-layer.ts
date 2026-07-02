@@ -1,17 +1,17 @@
-import type { LLRequest } from "./types/request.ts";
-import type { DecisionResult } from "./types/result.ts";
-import type { Rule } from "./types/rule.ts";
-import type { LimitLayerConfig } from "./types/config.ts";
-import type { Algorithm } from "./types/algorithm.ts";
+import type { LLRequest } from "./types/request.js";
+import type { DecisionResult } from "./types/result.js";
+import type { Rule } from "./types/rule.js";
+import type { LimitLayerConfig } from "./types/config.js";
+import type { Algorithm } from "./types/algorithm.js";
 
-import { RuleValidator } from "./services/rule-validator.ts";
-import { RuleMatcher } from "./services/rule-matcher.ts";
+import { RuleValidator } from "./services/rule-validator.js";
+import { RuleMatcher } from "./services/rule-matcher.js";
 
-import { DecisionEngine } from "./engine/decision-engine.ts";
-import { AlgorithmRegistry } from "./engine/algorithm-registry.ts";
+import { DecisionEngine } from "./engine/decision-engine.js";
+import { AlgorithmRegistry } from "./engine/algorithm-registry.js";
 
-import { FixedWindowAlgorithm } from "./algorithms/fixed-window.ts";
-import { NoMatchingRuleError } from "./errors/no-matching-rule.error.ts";
+import { FixedWindowAlgorithm } from "./algorithms/fixed-window.js";
+import { NoMatchingRuleError } from "./errors/no-matching-rule.error.js";
 
 export class LimitLayer {
   private readonly engine: DecisionEngine;
@@ -30,9 +30,12 @@ export class LimitLayer {
     }
 
     // Sort by priority (highest first)
-    config.rules.sort(
-      (a, b) => (b.priority ?? 0) - (a.priority ?? 0)
-    );
+    this.config = {
+        ...config,
+        rules: [...config.rules].sort(
+          (a, b) => (b.priority ?? 0) - (a.priority ?? 0)
+        ),
+      };
 
     this.engine = new DecisionEngine(
       config.storage,
@@ -41,15 +44,17 @@ export class LimitLayer {
   }
 
   private registerBuiltinAlgorithms(): void {
-    this.registry.register(
-      "fixed-window",
-      new FixedWindowAlgorithm()
-    );
+    if (!this.registry.has("fixed-window")) {
+      this.registry.register(
+        "fixed-window",
+        new FixedWindowAlgorithm()
+      );
+    }
   }
 
   public registerAlgorithm(
     name: string,
-    algorithm: Algorithm<any>
+    algorithm: Algorithm<unknown>
   ): this {
     this.registry.register(name, algorithm);
     return this;
@@ -81,6 +86,15 @@ export class LimitLayer {
 
 export function createLimitLayer(
     config: LimitLayerConfig
-  ) {
+  ): LimitLayer {
     return new LimitLayer(config);
+  }
+  export function isLimitLayer(
+    value: unknown
+  ): value is LimitLayer {
+    return (
+      typeof value === "object" &&
+      value !== null &&
+      typeof (value as { consume?: unknown }).consume === "function"
+    );
   }

@@ -13,16 +13,14 @@
   
       "esModuleInterop": true,
   
-      "skipLibCheck": true,
-  
       "resolveJsonModule": true,
+  
+      "skipLibCheck": true,
   
       "isolatedModules": true,
   
-      "noUncheckedIndexedAccess": true,
-  
       "forceConsistentCasingInFileNames": true,
-      "noEmit": true,
-      "allowImportingTsExtensions": true
+  
+      "noUncheckedIndexedAccess": true
     }
   }

@@ -1,6 +1,6 @@
-import type { Rule } from "../types/rule.ts";
-import { InvalidTimeWindowError } from "../errors/index.ts";
-import { parseWindow } from "../utils/parse-window.ts";
+import type { Rule } from "../types/rule.js";
+import { InvalidTimeWindowError } from "../errors/index.js";
+import { parseWindow } from "../utils/parse-window.js";
 
 const VALID_METHODS = new Set([
   "GET",

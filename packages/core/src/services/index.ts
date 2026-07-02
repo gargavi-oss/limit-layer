@@ -1,2 +1,2 @@
-export * from "./rule-matcher.ts"
-export * from "./rule-validator.ts"
+export * from "./rule-matcher.js"
+export * from "./rule-validator.js"

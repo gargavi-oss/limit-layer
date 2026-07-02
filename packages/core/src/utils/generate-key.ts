@@ -1,5 +1,5 @@
-import type { LLRequest } from "../types/request.ts";
-import type { Rule } from "../types/rule.ts";
+import type { LLRequest } from "../types/request.js";
+import type { Rule } from "../types/rule.js";
 
 export async function generateKey(
   request: LLRequest,

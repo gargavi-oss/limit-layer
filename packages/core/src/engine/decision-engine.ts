@@ -1,9 +1,9 @@
-import type { StorageAdapter } from "../types/storage.ts";
-import type { LLRequest } from "../types/request.ts";
-import type { Rule } from "../types/rule.ts";
-import type { DecisionResult } from "../types/result.ts";
-import { AlgorithmRegistry } from "./algorithm-registry.ts";
-import { generateKey } from "../utils/generate-key.ts";
+import type { StorageAdapter } from "../types/storage.js";
+import type { LLRequest } from "../types/request.js";
+import type { Rule } from "../types/rule.js";
+import type { DecisionResult } from "../types/result.js";
+import { AlgorithmRegistry } from "./algorithm-registry.js";
+import { generateKey } from "../utils/generate-key.js";
 
 export class DecisionEngine {
   constructor(
