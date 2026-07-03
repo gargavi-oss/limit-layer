@@ -28,13 +28,13 @@
       "dev": "tsup --watch",
       "clean": "rm -rf dist"
     },
-    "homepage": "https://github.com/limitlayer/limitlayer#readme",
+    "homepage": "https://github.com/gargavi-oss/limit-layer/packages/core#README",
     "repository": {
       "type": "git",
-      "url": "git+https://github.com/limitlayer/limitlayer.git"
+      "url": "git+https://github.com/gargavi-oss/limit-layer.git"
     },
     "bugs": {
-      "url": "https://github.com/limitlayer/limitlayer/issues"
+      "url": "https://github.com/gargavi-oss/limit-layer"
     },
     "keywords": [
       "rate-limit",
