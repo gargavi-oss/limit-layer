@@ -10,9 +10,9 @@
 ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js\&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-11-F69220?logo=pnpm\&logoColor=white)
 
-LimitLayer is an extensible rate-limiting toolkit designed for modern backend applications. It separates the core rate-limiting engine from framework adapters, allowing you to apply different algorithms to different endpoints while keeping a consistent developer experience.
+LimitLayer is an extensible rate-limiting toolkit for modern backend applications. It separates the core rate-limiting engine from framework adapters, allowing you to apply different algorithms to different endpoints while maintaining a consistent developer experience.
 
-Whether you're protecting authentication endpoints, public APIs, payment services, or webhooks, LimitLayer lets you choose the most appropriate strategy for each route.
+Whether you're protecting authentication endpoints, public APIs, payment services, webhooks, or internal services, LimitLayer provides a modular foundation that can grow with your application.
 
 ---
 
@@ -20,8 +20,8 @@ Whether you're protecting authentication endpoints, public APIs, payment service
 
 * 🚀 Framework-agnostic core
 * ⚡ High-performance TypeScript implementation
-* 🧩 Modular architecture
 * 🎯 Per-route algorithm selection
+* 🧩 Modular architecture
 * ✅ Fixed Window algorithm
 * ✅ Sliding Window algorithm
 * 💾 Pluggable storage architecture
@@ -29,7 +29,9 @@ Whether you're protecting authentication endpoints, public APIs, payment service
 * 📦 ESM + CommonJS support
 * 🛠 Fully typed public API
 * 🚀 Official Express adapter
-* 📖 Simple, declarative configuration
+* 📖 Simple declarative configuration
+* 🧪 Unit tested
+* ⚙️ GitHub Actions CI
 
 ---
 
@@ -81,7 +83,7 @@ flowchart TD
 | `@limitlayer/core`    | Framework-agnostic rate limiting engine |
 | `@limitlayer/express` | Official Express middleware             |
 
-More adapters will be added in future releases.
+More framework adapters will be added in future releases.
 
 ---
 
@@ -202,7 +204,7 @@ rules: [
 ]
 ```
 
-Instead of using a single strategy everywhere, LimitLayer lets you configure each endpoint independently while using the same engine.
+Instead of applying one strategy everywhere, LimitLayer lets you choose the most appropriate algorithm for each endpoint while using the same engine and configuration model.
 
 ---
 
@@ -230,6 +232,20 @@ Instead of using a single strategy everywhere, LimitLayer lets you configure eac
 
 ---
 
+# 📚 Documentation
+
+Learn more about LimitLayer through the project documentation.
+
+| Guide                                           | Description                                           |
+| ----------------------------------------------- | ----------------------------------------------------- |
+| 📖 [Getting Started](./docs/getting-started.md) | Installation, configuration and first limiter         |
+| 🏗️ [Architecture](./docs/architecture.md)      | Understand the internal architecture and request flow |
+| 🧠 [Algorithms](./docs/algorithms.md)           | Learn how each algorithm works and when to use it     |
+
+Additional guides covering storage adapters, custom algorithms, and framework integrations will be added in future releases.
+
+---
+
 # 🛣️ Roadmap
 
 ### v0.1
@@ -250,7 +266,8 @@ Instead of using a single strategy everywhere, LimitLayer lets you configure eac
 * Leaky Bucket
 * Redis storage adapter
 * Additional storage adapters
-* Performance benchmarking
+* Performance benchmarks
+* More examples
 
 ### Future
 
@@ -290,17 +307,11 @@ pnpm test
 
 # 🤝 Contributing
 
-Contributions are always welcome.
+Contributions are welcome.
 
-If you'd like to improve LimitLayer:
+Whether you're fixing bugs, improving documentation, implementing algorithms, adding storage adapters, or building framework integrations, your contributions are appreciated.
 
-1. Fork the repository.
-2. Create a feature branch.
-3. Make your changes.
-4. Add or update tests where appropriate.
-5. Submit a Pull Request.
-
-Feature ideas, bug reports, and discussions are also appreciated.
+Please read the contribution guidelines before opening a Pull Request.
 
 ---
 
