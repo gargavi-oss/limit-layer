@@ -1,8 +1,8 @@
 # @limitlayer/core
 
-> A modern, framework-agnostic rate limiting engine for Node.js and TypeScript.
+A modern, framework-agnostic rate limiting engine for Node.js and TypeScript.
 
-`@limitlayer/core` provides the core rate limiting engine used by LimitLayer. It is independent of any web framework, making it suitable for HTTP servers, WebSockets, background jobs, GraphQL, RPC, and custom applications.
+`@limitlayer/core` is the heart of the **LimitLayer** ecosystem. It provides a flexible, extensible rate-limiting engine that can be used with any framework or runtime, including Express, Fastify, Hono, GraphQL, WebSockets, background workers, RPC services, and custom applications.
 
 ---
 
@@ -10,11 +10,13 @@
 
 * 🚀 Framework-agnostic
 * ⚡ High-performance TypeScript implementation
-* 🔒 Fixed Window rate limiting
+* 🧩 Pluggable rate-limiting algorithms
+* ✅ Fixed Window algorithm
+* ✅ Sliding Window algorithm
 * 💾 Pluggable storage adapters
-* 🧩 Extensible algorithm architecture
 * 📦 ESM + CommonJS support
 * 🛠 Fully typed API
+* 🔧 Extensible architecture for custom algorithms
 
 ---
 
@@ -39,8 +41,14 @@ const limiter = createLimitLayer({
   rules: [
     {
       path: "/login",
-      algorithm: "fixed-window",
+      algorithm: "sliding-window",
       limit: 5,
+      window: "1m",
+    },
+    {
+      path: "/api/*",
+      algorithm: "fixed-window",
+      limit: 100,
       window: "1m",
     },
   ],
@@ -59,30 +67,83 @@ console.log(result);
 
 ---
 
-## Built-in Components
+## Built-in Algorithms
 
-### Algorithms
+| Algorithm        | Status    |
+| ---------------- | --------- |
+| ✅ Fixed Window   | Available |
+| ✅ Sliding Window | Available |
+| 🚧 Token Bucket  | Planned   |
+| 🚧 Sliding Log   | Planned   |
+| 🚧 Leaky Bucket  | Planned   |
 
-* ✅ Fixed Window
-* 🚧 Sliding Window
-* 🚧 Sliding Log
-* 🚧 Token Bucket
-* 🚧 Leaky Bucket
+---
 
-### Storage
+## Storage Adapters
 
-* ✅ MemoryStore
-* 🚧 RedisStore
+| Storage          | Status    |
+| ---------------- | --------- |
+| ✅ MemoryStore    | Available |
+| 🚧 RedisStore    | Planned   |
+| 🚧 Upstash Redis | Planned   |
+| 🚧 PostgreSQL    | Planned   |
+| 🚧 MongoDB       | Planned   |
+
+---
+
+## Why LimitLayer?
+
+LimitLayer is designed around a modular architecture where different endpoints can use different rate-limiting strategies.
+
+```ts
+rules: [
+  {
+    path: "/login",
+    algorithm: "sliding-window",
+    limit: 5,
+    window: "1m",
+  },
+  {
+    path: "/payments",
+    algorithm: "fixed-window",
+    limit: 20,
+    window: "1m",
+  },
+]
+```
+
+This makes it easy to choose the most appropriate algorithm for each endpoint without changing your application's architecture.
+
+---
+
+## Roadmap
+
+Upcoming features include:
+
+* Token Bucket algorithm
+* Sliding Log algorithm
+* Leaky Bucket algorithm
+* Redis storage adapter
+* Additional storage strategies
+* Performance benchmarking
+* Additional framework adapters
+
+---
+
+## Related Packages
+
+* **@limitlayer/core** — Framework-agnostic rate limiting engine
+* **@limitlayer/express** — Official Express middleware
+
+More adapters will be added as the ecosystem grows.
 
 ---
 
 ## Documentation
 
-The complete documentation, examples, roadmap, and framework adapters are available in the main repository.
+For complete documentation, examples, contribution guidelines, and the project roadmap, visit the main repository:
 
-GitHub Repository:
-
-https://github.com/gargavi-oss/limit-layer
+**GitHub:** https://github.com/gargavi-oss/limit-layer
 
 ---
 

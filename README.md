@@ -157,7 +157,7 @@ app.listen(3000);
 | Algorithm      | Status      |
 | -------------- | ----------- |
 | Fixed Window   | ✅ Available |
-| Sliding Window | 🚧 Planned  |
+| Sliding Window | ✅ Available |
 | Sliding Log    | 🚧 Planned  |
 | Token Bucket   | 🚧 Planned  |
 | Leaky Bucket   | 🚧 Planned  |
