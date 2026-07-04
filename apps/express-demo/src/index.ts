@@ -24,9 +24,9 @@ app.use(
         },
         {
             path: "/hello",
-            algorithm: "fixed-window",
-            limit: 4,
-            window: "10s",
+            algorithm: "sliding-window",
+            limit: 2,
+            window: "2s",
           },
       ],
     })
@@ -45,3 +45,4 @@ app.listen(port, () => {
     console.log(`TypeScript with Express 
          http://localhost:${port}/`);
 });
+

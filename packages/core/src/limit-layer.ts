@@ -12,6 +12,7 @@ import { AlgorithmRegistry } from "./engine/algorithm-registry.js";
 
 import { FixedWindowAlgorithm } from "./algorithms/fixed-window.js";
 import { NoMatchingRuleError } from "./errors/no-matching-rule.error.js";
+import { SlidingWindowAlgorithm } from "./algorithms/sliding-window.js";
 
 export class LimitLayer {
   private readonly engine: DecisionEngine;
@@ -50,6 +51,13 @@ export class LimitLayer {
         new FixedWindowAlgorithm()
       );
     }
+    if (!this.registry.has("sliding-window")) {
+      this.registry.register(
+        "sliding-window",
+        new SlidingWindowAlgorithm()
+      );  
+  }
+    
   }
 
   public registerAlgorithm(
@@ -60,24 +68,35 @@ export class LimitLayer {
     return this;
   }
 
-  async consume(
-    request: LLRequest
-  ): Promise<DecisionResult | null> {
-    const rule = RuleMatcher.match(
-      request,
-      this.config.rules
-    );
+  public findMatchingRule(
+  request: LLRequest
+): Rule | null {
+  return RuleMatcher.match(
+    request,
+    this.config.rules
+  );
+}
 
-    if (!rule) {
-      if (this.config.throwOnNoRule) {
-        throw new NoMatchingRuleError(request.path);
-      }
+async consume(
+  request: LLRequest
+): Promise<DecisionResult | null> {
 
-      return null;
+  const rule = this.findMatchingRule(request);
+
+  if (!rule) {
+    if (this.config.throwOnNoRule) {
+      throw new NoMatchingRuleError(request.path);
     }
 
-    return this.engine.consume(request, rule);
+    return null;
   }
+
+  return this.engine.consume(
+    request,
+    rule
+  );
+}
+
 
   getRules(): Rule[] {
     return [...this.config.rules];
