@@ -1,74 +1,91 @@
 # 🚀 LimitLayer
 
-> A modern, framework-agnostic rate limiting library for Node.js and TypeScript.
+> A modern, framework-agnostic rate limiting toolkit for Node.js and TypeScript.
 
 [![CI](https://github.com/gargavi-oss/limit-layer/actions/workflows/ci.yml/badge.svg)](https://github.com/gargavi-oss/limit-layer/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/@limitlayer/core)](https://www.npmjs.com/package/@limitlayer/core)
 [![npm downloads](https://img.shields.io/npm/dm/@limitlayer/core)](https://www.npmjs.com/package/@limitlayer/core)
 [![License](https://img.shields.io/github/license/gargavi-oss/limit-layer)](LICENSE)
-![TypeScript](https://img.shields.io/badge/TypeScript-5+-3178C6?logo=typescript&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)
-![pnpm](https://img.shields.io/badge/pnpm-11-F69220?logo=pnpm&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5+-3178C6?logo=typescript\&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js\&logoColor=white)
+![pnpm](https://img.shields.io/badge/pnpm-11-F69220?logo=pnpm\&logoColor=white)
 
-LimitLayer is designed to be fast, extensible, and easy to integrate. It separates the core rate-limiting engine from framework adapters, allowing the same limiter to work across Express today and other frameworks in future releases.
+LimitLayer is an extensible rate-limiting toolkit designed for modern backend applications. It separates the core rate-limiting engine from framework adapters, allowing you to apply different algorithms to different endpoints while keeping a consistent developer experience.
+
+Whether you're protecting authentication endpoints, public APIs, payment services, or webhooks, LimitLayer lets you choose the most appropriate strategy for each route.
 
 ---
 
-## 🏗️ Architecture
+# ✨ Features
+
+* 🚀 Framework-agnostic core
+* ⚡ High-performance TypeScript implementation
+* 🧩 Modular architecture
+* 🎯 Per-route algorithm selection
+* ✅ Fixed Window algorithm
+* ✅ Sliding Window algorithm
+* 💾 Pluggable storage architecture
+* 🧠 Extensible algorithm registry
+* 📦 ESM + CommonJS support
+* 🛠 Fully typed public API
+* 🚀 Official Express adapter
+* 📖 Simple, declarative configuration
+
+---
+
+# 🏗️ Architecture
 
 ```mermaid
 flowchart TD
 
-    App[Application]
+    APP[Application]
 
-    Express["@limitlayer/express"]
+    EXPRESS["@limitlayer/express"]
 
-    Core["@limitlayer/core"]
+    CORE["@limitlayer/core"]
 
-    Engine[Decision Engine]
+    LIMITER[LimitLayer]
 
-    Matcher[Rule Matcher]
+    ENGINE[Decision Engine]
 
-    Registry[Algorithm Registry]
+    MATCHER[Rule Matcher]
 
-    Algorithm[Fixed Window Algorithm]
+    REGISTRY[Algorithm Registry]
 
-    Store[Memory Store]
+    FW[Fixed Window]
 
-    App --> Express
-    Express --> Core
+    SW[Sliding Window]
 
-    Core --> Engine
-    Engine --> Matcher
-    Engine --> Registry
-    Registry --> Algorithm
-    Engine --> Store
+    STORE[Memory Store]
+
+    APP --> EXPRESS
+    EXPRESS --> CORE
+
+    CORE --> LIMITER
+    LIMITER --> ENGINE
+
+    ENGINE --> MATCHER
+    ENGINE --> REGISTRY
+    ENGINE --> STORE
+
+    REGISTRY --> FW
+    REGISTRY --> SW
 ```
 
-## ✨ Features
+---
 
-* ⚡ High-performance TypeScript implementation
-* 🧩 Framework-agnostic core
-* 🚀 Official Express adapter
-* 📦 ESM + CommonJS support
-* 🔒 Built-in Fixed Window algorithm
-* 🧠 Extensible algorithm registry
-* 💾 Pluggable storage architecture
-* 🛠 Type-safe public API
-* 📖 Simple configuration
+# 📦 Packages
+
+| Package               | Description                             |
+| --------------------- | --------------------------------------- |
+| `@limitlayer/core`    | Framework-agnostic rate limiting engine |
+| `@limitlayer/express` | Official Express middleware             |
+
+More adapters will be added in future releases.
 
 ---
 
-## Packages
-
-| Package               | Description               |
-| --------------------- | ------------------------- |
-| `@limitlayer/core`    | Core rate limiting engine |
-| `@limitlayer/express` | Express middleware        |
-
----
-
-## Installation
+# 🚀 Installation
 
 ### Core
 
@@ -79,12 +96,12 @@ npm install @limitlayer/core
 ### Express
 
 ```bash
-npm install @limitlayer/core @limitlayer/express express
+npm install express @limitlayer/core @limitlayer/express
 ```
 
 ---
 
-## Quick Start
+# ⚡ Quick Start
 
 ```ts
 import {
@@ -97,8 +114,14 @@ const limiter = createLimitLayer({
   rules: [
     {
       path: "/login",
-      algorithm: "fixed-window",
+      algorithm: "sliding-window",
       limit: 5,
+      window: "1m",
+    },
+    {
+      path: "/api/*",
+      algorithm: "fixed-window",
+      limit: 100,
       window: "1m",
     },
   ],
@@ -117,7 +140,7 @@ console.log(result);
 
 ---
 
-## Express Example
+# 🌐 Express Example
 
 ```ts
 import express from "express";
@@ -133,80 +156,121 @@ app.use(
     rules: [
       {
         path: "/login",
-        algorithm: "fixed-window",
+        algorithm: "sliding-window",
         limit: 5,
+        window: "1m",
+      },
+      {
+        path: "/api/*",
+        algorithm: "fixed-window",
+        limit: 100,
         window: "1m",
       },
     ],
   })
 );
 
-app.post("/login", (_, res) => {
-  res.json({
-    success: true,
-  });
-});
-
 app.listen(3000);
 ```
 
 ---
 
-## Built-in Algorithms
+# 🎯 Why LimitLayer?
 
-| Algorithm      | Status      |
-| -------------- | ----------- |
-| Fixed Window   | ✅ Available |
-| Sliding Window | ✅ Available |
-| Sliding Log    | 🚧 Planned  |
-| Token Bucket   | 🚧 Planned  |
-| Leaky Bucket   | 🚧 Planned  |
+Different endpoints often require different rate-limiting strategies.
+
+```ts
+rules: [
+  {
+    path: "/login",
+    algorithm: "sliding-window",
+    limit: 5,
+    window: "1m",
+  },
+  {
+    path: "/payments",
+    algorithm: "fixed-window",
+    limit: 20,
+    window: "1m",
+  },
+  {
+    path: "/api/*",
+    algorithm: "fixed-window",
+    limit: 100,
+    window: "1m",
+  },
+]
+```
+
+Instead of using a single strategy everywhere, LimitLayer lets you configure each endpoint independently while using the same engine.
 
 ---
 
-## Storage
+# 🧠 Built-in Algorithms
 
-| Storage     | Status      |
-| ----------- | ----------- |
-| MemoryStore | ✅ Available |
-| RedisStore  | 🚧 Planned  |
+| Algorithm        | Status    |
+| ---------------- | --------- |
+| ✅ Fixed Window   | Available |
+| ✅ Sliding Window | Available |
+| 🚧 Token Bucket  | Planned   |
+| 🚧 Sliding Log   | Planned   |
+| 🚧 Leaky Bucket  | Planned   |
 
 ---
 
-## Roadmap
+# 💾 Storage Adapters
+
+| Storage          | Status    |
+| ---------------- | --------- |
+| ✅ MemoryStore    | Available |
+| 🚧 RedisStore    | Planned   |
+| 🚧 Upstash Redis | Planned   |
+| 🚧 PostgreSQL    | Planned   |
+| 🚧 MongoDB       | Planned   |
+
+---
+
+# 🛣️ Roadmap
 
 ### v0.1
 
-* Core engine
-* Memory storage
-* Fixed Window algorithm
-* Express adapter
+* ✅ Core engine
+* ✅ MemoryStore
+* ✅ Fixed Window
+* ✅ Sliding Window
+* ✅ Express adapter
+* ✅ TypeScript support
+* ✅ GitHub Actions
+* ✅ Unit tests
 
-### v0.2
+### Upcoming
 
-* Redis storage
-* Sliding Window
 * Token Bucket
-* Leaky Bucket
 * Sliding Log
+* Leaky Bucket
+* Redis storage adapter
+* Additional storage adapters
+* Performance benchmarking
 
 ### Future
 
 * Fastify adapter
 * Hono adapter
-* Next.js adapter
+* Koa adapter
+* NestJS integration
+* Next.js integration
 * Analytics dashboard
-* Hosted SaaS
+* Hosted SaaS platform
 
 ---
 
-## Development
+# 🛠️ Development
 
 Clone the repository:
 
 ```bash
-git clone https://github.com/gargavi-oss/limitlayer.git
-cd limitlayer
+git clone https://github.com/gargavi-oss/limit-layer.git
+cd limit-layer
 pnpm install
 ```
 
@@ -224,21 +288,26 @@ pnpm test
 
 ---
 
-## Contributing
+# 🤝 Contributing
 
-Contributions, bug reports, feature requests, and discussions are welcome.
+Contributions are always welcome.
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Open a Pull Request
+If you'd like to improve LimitLayer:
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Make your changes.
+4. Add or update tests where appropriate.
+5. Submit a Pull Request.
+
+Feature ideas, bug reports, and discussions are also appreciated.
 
 ---
 
-## License
+# 📄 License
 
 MIT License.
 
 ---
 
-Built with ❤️ using TypeScript.
+Built with ❤️ in TypeScript.
