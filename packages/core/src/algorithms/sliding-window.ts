@@ -79,7 +79,7 @@ const windowMs = getWindowMs(rule);
         resetAt: state.resetAt,
         retryAfter: 0,
         state,
-        ttl: state.resetAt - now,
+       ttl: (state.resetAt - now) + windowMs,
       };
     }
 
@@ -90,7 +90,7 @@ const windowMs = getWindowMs(rule);
       resetAt: state.resetAt,
       retryAfter: state.resetAt - now,
       state,
-      ttl: state.resetAt - now,
+     ttl: (state.resetAt - now) + windowMs,
     };
   }
 }

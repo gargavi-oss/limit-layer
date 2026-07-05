@@ -63,16 +63,17 @@ app.listen(3000);
 
 ## Features
 
-* 🚀 Official Express middleware
-* ⚡ Powered by `@limitlayer/core`
-* 🧩 Supports multiple rate-limiting algorithms
-* ✅ Fixed Window algorithm
-* ✅ Sliding Window algorithm
-* 📦 ESM + CommonJS support
-* 🛠 Fully typed with TypeScript
-* 📋 Standard RateLimit response headers
-* 🔒 Automatic `429 Too Many Requests` responses
-* 🎯 Per-route algorithm configuration
+- 🚀 Official Express middleware
+- ⚡ Powered by `@limitlayer/core`
+- 🧩 Supports multiple rate-limiting algorithms
+- ✅ Fixed Window algorithm
+- ✅ Sliding Window algorithm
+- ✅ Token Bucket algorithm
+- 📦 ESM + CommonJS support
+- 🛠 Fully typed with TypeScript
+- 📋 Standard RateLimit response headers
+- 🔒 Automatic `429 Too Many Requests` responses
+- 🎯 Per-route algorithm configuration
 
 ---
 
@@ -96,19 +97,26 @@ app.use(
   limitLayer({
     storage: new MemoryStore(),
     rules: [
-      {
-        path: "/login",
-        algorithm: "sliding-window",
-        limit: 5,
-        window: "1m",
-      },
-      {
-        path: "/api/*",
-        algorithm: "fixed-window",
-        limit: 100,
-        window: "1m",
-      },
-    ],
+    {
+      path: "/login",
+      algorithm: "sliding-window",
+      limit: 5,
+      window: "1m",
+    },
+    {
+      path: "/payments",
+      algorithm: "token-bucket",
+      limit: 20,
+      burst: 40,
+      window: "1m",
+    },
+    {
+      path: "/api/*",
+      algorithm: "fixed-window",
+      limit: 100,
+      window: "1m",
+    },
+  ]
   })
 );
 ```
@@ -123,7 +131,7 @@ Different endpoints can use different rate-limiting algorithms based on their tr
 | ---------------- | --------- |
 | ✅ Fixed Window   | Available |
 | ✅ Sliding Window | Available |
-| 🚧 Token Bucket  | Planned   |
+| ✅ Token Bucket  | Available   |
 | 🚧 Sliding Log   | Planned   |
 | 🚧 Leaky Bucket  | Planned   |
 
@@ -133,7 +141,6 @@ Different endpoints can use different rate-limiting algorithms based on their tr
 
 Future releases will include:
 
-* Token Bucket algorithm
 * Sliding Log algorithm
 * Leaky Bucket algorithm
 * Redis storage adapter

@@ -22,8 +22,9 @@ Whether you're protecting authentication endpoints, public APIs, payment service
 * ⚡ High-performance TypeScript implementation
 * 🎯 Per-route algorithm selection
 * 🧩 Modular architecture
-* ✅ Fixed Window algorithm
-* ✅ Sliding Window algorithm
+- ✅ Fixed Window algorithm
+- ✅ Sliding Window algorithm
+- ✅ Token Bucket algorithm
 * 💾 Pluggable storage architecture
 * 🧠 Extensible algorithm registry
 * 📦 ESM + CommonJS support
@@ -55,8 +56,8 @@ flowchart TD
     REGISTRY[Algorithm Registry]
 
     FW[Fixed Window]
-
     SW[Sliding Window]
+    TB[Token Bucket]
 
     STORE[Memory Store]
 
@@ -72,6 +73,7 @@ flowchart TD
 
     REGISTRY --> FW
     REGISTRY --> SW
+    REGISTRY --> TB
 ```
 
 ---
@@ -121,6 +123,13 @@ const limiter = createLimitLayer({
       window: "1m",
     },
     {
+      path: "/payments",
+      algorithm: "token-bucket",
+      limit: 20,
+      burst: 40,
+      window: "1m",
+    },
+    {
       path: "/api/*",
       algorithm: "fixed-window",
       limit: 100,
@@ -163,12 +172,19 @@ app.use(
         window: "1m",
       },
       {
+        path: "/payments",
+        algorithm: "token-bucket",
+        limit: 20,
+        burst: 40,
+        window: "1m",
+      },
+      {
         path: "/api/*",
         algorithm: "fixed-window",
         limit: 100,
         window: "1m",
       },
-    ],
+    ]
   })
 );
 
@@ -214,7 +230,7 @@ Instead of applying one strategy everywhere, LimitLayer lets you choose the most
 | ---------------- | --------- |
 | ✅ Fixed Window   | Available |
 | ✅ Sliding Window | Available |
-| 🚧 Token Bucket  | Planned   |
+| ✅ Token Bucket  | Available   |
 | 🚧 Sliding Log   | Planned   |
 | 🚧 Leaky Bucket  | Planned   |
 
@@ -250,18 +266,19 @@ Additional guides covering storage adapters, custom algorithms, and framework in
 
 ### v0.1
 
-* ✅ Core engine
-* ✅ MemoryStore
-* ✅ Fixed Window
-* ✅ Sliding Window
-* ✅ Express adapter
-* ✅ TypeScript support
-* ✅ GitHub Actions
-* ✅ Unit tests
+- ✅ Core engine
+- ✅ MemoryStore
+- ✅ Fixed Window
+- ✅ Sliding Window
+- ✅ Token Bucket
+- ✅ Express adapter
+- ✅ TypeScript support
+- ✅ GitHub Actions
+- ✅ Unit tests
+- ✅ Documentation
 
 ### Upcoming
 
-* Token Bucket
 * Sliding Log
 * Leaky Bucket
 * Redis storage adapter

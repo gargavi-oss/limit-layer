@@ -8,15 +8,16 @@ A modern, framework-agnostic rate limiting engine for Node.js and TypeScript.
 
 ## Features
 
-* 🚀 Framework-agnostic
-* ⚡ High-performance TypeScript implementation
-* 🧩 Pluggable rate-limiting algorithms
-* ✅ Fixed Window algorithm
-* ✅ Sliding Window algorithm
-* 💾 Pluggable storage adapters
-* 📦 ESM + CommonJS support
-* 🛠 Fully typed API
-* 🔧 Extensible architecture for custom algorithms
+- 🚀 Framework-agnostic
+- ⚡ High-performance TypeScript implementation
+- 🧩 Pluggable rate-limiting algorithms
+- ✅ Fixed Window algorithm
+- ✅ Sliding Window algorithm
+- ✅ Token Bucket algorithm
+- 💾 Pluggable storage adapters
+- 📦 ESM + CommonJS support
+- 🛠 Fully typed API
+- 🔧 Extensible architecture for custom algorithms
 
 ---
 
@@ -46,12 +47,19 @@ const limiter = createLimitLayer({
       window: "1m",
     },
     {
+      path: "/payments",
+      algorithm: "token-bucket",
+      limit: 20,
+      burst: 40,
+      window: "1m",
+    },
+    {
       path: "/api/*",
       algorithm: "fixed-window",
       limit: 100,
       window: "1m",
     },
-  ],
+  ]
 });
 
 const result = await limiter.consume({
@@ -73,7 +81,7 @@ console.log(result);
 | ---------------- | --------- |
 | ✅ Fixed Window   | Available |
 | ✅ Sliding Window | Available |
-| 🚧 Token Bucket  | Planned   |
+| ✅ Token Bucket  | Available |
 | 🚧 Sliding Log   | Planned   |
 | 🚧 Leaky Bucket  | Planned   |
 
@@ -105,8 +113,15 @@ rules: [
   },
   {
     path: "/payments",
-    algorithm: "fixed-window",
+    algorithm: "token-bucket",
     limit: 20,
+    burst: 40,
+    window: "1m",
+  },
+  {
+    path: "/api/*",
+    algorithm: "fixed-window",
+    limit: 100,
     window: "1m",
   },
 ]
@@ -120,7 +135,6 @@ This makes it easy to choose the most appropriate algorithm for each endpoint wi
 
 Upcoming features include:
 
-* Token Bucket algorithm
 * Sliding Log algorithm
 * Leaky Bucket algorithm
 * Redis storage adapter

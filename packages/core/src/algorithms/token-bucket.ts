@@ -7,7 +7,7 @@ import type {
 import type { TokenBucketState } from "../types/state.js";
 import { getCapacity, getWindowMs } from "../utils/algorithm.js";
 
-import { parseWindow } from "../utils/parse-window.js";
+
 
 export class TokenBucketAlgorithm
   implements Algorithm<TokenBucketState>
@@ -78,7 +78,7 @@ return {
     resetAt,
     retryAfter,
     state,
-    ttl: retryAfter,
+   ttl: Math.ceil((capacity - state.tokens) / refillRate),
 };
   }
 }

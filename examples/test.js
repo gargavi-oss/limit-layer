@@ -1,20 +1,47 @@
-const delay = (ms) => new Promise((r) => setTimeout(r, ms));
+const delay = (ms) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
 
-async function hit() {
-  const start = Date.now();
-
+async function hit(label) {
   const res = await fetch("http://localhost:3000/hello");
 
   console.log(
-    `${Date.now() - start}ms`,
-    new Date().toISOString(),
-    res.status
+    `${label.padEnd(15)} ${res.status}`
   );
 }
 
 (async () => {
-  for (let i = 0; i < 15; i++) {
-    await hit();
-    await delay(250);
-  }
+  console.log("\n===== Initial Burst =====");
+
+  await hit("Request 1");
+  await hit("Request 2");
+  await hit("Request 3");
+  await hit("Request 4");
+
+  console.log("\n===== Bucket Empty =====");
+
+  await hit("Request 5");
+  await hit("Request 6");
+
+  console.log("\nWaiting 1 second...\n");
+
+  await delay(1000);
+
+  await hit("After 1 sec");
+
+  console.log("\nWaiting another 1 second...\n");
+
+  await delay(1000);
+
+  await hit("After 2 sec");
+  await hit("After 2 sec");
+
+  console.log("\nWaiting 4 seconds...\n");
+
+  await delay(4000);
+
+  await hit("After 6 sec");
+  await hit("After 6 sec");
+  await hit("After 6 sec");
+  await hit("After 6 sec");
+  await hit("After 6 sec");
 })();

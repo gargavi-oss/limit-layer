@@ -1,7 +1,7 @@
 {
     "name": "@limitlayer/core",
     "private":false,
-    "version": "v0.1.0-alpha.4",
+    "version": "0.1.0-alpha.5",
     "type": "module",
     "publishConfig": {
     "access": "public"
@@ -28,7 +28,7 @@
       "dev": "tsup --watch",
       "clean": "rm -rf dist"
     },
-    "homepage": "https://github.com/gargavi-oss/limit-layer/packages/core#README",
+    "homepage": "https://github.com/gargavi-oss/limit-layer/packages/core#readme",
     "repository": {
       "type": "git",
       "url": "git+https://github.com/gargavi-oss/limit-layer.git"
@@ -37,14 +37,19 @@
       "url": "https://github.com/gargavi-oss/limit-layer"
     },
     "keywords": [
-      "rate-limit",
-      "rate-limiter",
-      "express",
-      "typescript",
-      "nodejs",
-      "middleware",
-      "api",
-      "backend"
-    ],
+  "rate-limit",
+  "rate-limiter",
+  "rate-limiting",
+  "token-bucket",
+  "sliding-window",
+  "fixed-window",
+  "typescript",
+  "node",
+  "backend",
+  "api",
+  "middleware",
+  "express",
+  "security"
+],
      "license": "MIT"
   }
