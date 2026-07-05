@@ -4,7 +4,13 @@ import type {
     AlgorithmResult,
   } from "../types/algorithm.js";
   import type { FixedWindowState } from "../types/state.js";
-  import { parseWindow } from "../utils/parse-window.js";
+
+
+  import {
+  getWindowMs,
+  getCapacity,
+} from "../utils/algorithm.js";
+
   
   export class FixedWindowAlgorithm
     implements Algorithm<FixedWindowState>
@@ -14,7 +20,8 @@ import type {
     ): Promise<AlgorithmResult<FixedWindowState>> {
       const { rule, now } = context;
   
-      const windowMs = parseWindow(rule.window);
+
+const windowMs = getWindowMs(rule);
   
       let state =
         context.state ??

@@ -44,7 +44,7 @@ export function limitLayer(
     try {
       const request = adaptRequest(req);
 
-      // Find the matching rule
+      // Match rule (used only for optional diagnostic headers)
       const rule = limiter.findMatchingRule(request);
 
       const result = await limiter.consume(request);
@@ -54,15 +54,18 @@ export function limitLayer(
         return next();
       }
 
-      // Debug header
-      if (rule) {
+      // Optional diagnostic header
+      if (
+        options.exposeAlgorithm &&
+        rule
+      ) {
         res.setHeader(
           "X-RateLimit-Algorithm",
           rule.algorithm
         );
       }
 
-      // Apply standard rate-limit headers
+      // Apply rate-limit headers
       applyHeaders(res, result);
 
       // Allowed
@@ -82,7 +85,7 @@ export function limitLayer(
         retryAfter: result.retryAfter,
       });
     } catch (error) {
-      return next(error);
+      next(error);
     }
   };
 }

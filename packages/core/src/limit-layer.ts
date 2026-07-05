@@ -13,6 +13,7 @@ import { AlgorithmRegistry } from "./engine/algorithm-registry.js";
 import { FixedWindowAlgorithm } from "./algorithms/fixed-window.js";
 import { NoMatchingRuleError } from "./errors/no-matching-rule.error.js";
 import { SlidingWindowAlgorithm } from "./algorithms/sliding-window.js";
+import { TokenBucketAlgorithm } from "./algorithms/token-bucket.js";
 
 export class LimitLayer {
   private readonly engine: DecisionEngine;
@@ -56,7 +57,13 @@ export class LimitLayer {
         "sliding-window",
         new SlidingWindowAlgorithm()
       );  
-  }
+    }
+    if(!this.registry.has("tocken-bucket")){
+      this.registry.register(
+      "token-bucket",
+      new TokenBucketAlgorithm()
+      );
+    }
     
   }
 

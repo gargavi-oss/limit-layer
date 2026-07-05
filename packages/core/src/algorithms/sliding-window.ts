@@ -5,8 +5,9 @@ import type {
 } from "../types/algorithm.js";
 
 import type { SlidingWindowState } from "../types/state.js";
+import { getWindowMs } from "../utils/algorithm.js";
 
-import { parseWindow } from "../utils/parse-window.js";
+
 
 export class SlidingWindowAlgorithm
   implements Algorithm<SlidingWindowState>
@@ -16,7 +17,8 @@ export class SlidingWindowAlgorithm
   ): Promise<AlgorithmResult<SlidingWindowState>> {
     const { rule, now } = context;
 
-    const windowMs = parseWindow(rule.window);
+    
+const windowMs = getWindowMs(rule);
 
     let state =
       context.state ??
