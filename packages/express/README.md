@@ -37,6 +37,19 @@ app.use(
         window: "1m",
       },
       {
+        path: "/payments",
+        algorithm: "token-bucket",
+        limit: 20,
+        burst: 40,
+        window: "1m",
+      },
+      {
+        path: "/search",
+        algorithm: "sliding-log",
+        limit: 30,
+        window: "1m",
+      },
+      {
         path: "/api/*",
         algorithm: "fixed-window",
         limit: 100,
@@ -69,6 +82,7 @@ app.listen(3000);
 - ✅ Fixed Window algorithm
 - ✅ Sliding Window algorithm
 - ✅ Token Bucket algorithm
+- ✅ Sliding Log algorithm
 - 📦 ESM + CommonJS support
 - 🛠 Fully typed with TypeScript
 - 📋 Standard RateLimit response headers
@@ -96,27 +110,33 @@ Retry-After
 app.use(
   limitLayer({
     storage: new MemoryStore(),
-    rules: [
-    {
-      path: "/login",
-      algorithm: "sliding-window",
-      limit: 5,
-      window: "1m",
-    },
-    {
-      path: "/payments",
-      algorithm: "token-bucket",
-      limit: 20,
-      burst: 40,
-      window: "1m",
-    },
-    {
-      path: "/api/*",
-      algorithm: "fixed-window",
-      limit: 100,
-      window: "1m",
-    },
-  ]
+        rules: [
+      {
+        path: "/login",
+        algorithm: "sliding-window",
+        limit: 5,
+        window: "1m",
+      },
+      {
+        path: "/payments",
+        algorithm: "token-bucket",
+        limit: 20,
+        burst: 40,
+        window: "1m",
+      },
+      {
+        path: "/search",
+        algorithm: "sliding-log",
+        limit: 30,
+        window: "1m",
+      },
+      {
+        path: "/api/*",
+        algorithm: "fixed-window",
+        limit: 100,
+        window: "1m",
+      },
+    ],
   })
 );
 ```
@@ -131,8 +151,8 @@ Different endpoints can use different rate-limiting algorithms based on their tr
 | ---------------- | --------- |
 | ✅ Fixed Window   | Available |
 | ✅ Sliding Window | Available |
-| ✅ Token Bucket  | Available   |
-| 🚧 Sliding Log   | Planned   |
+| ✅ Token Bucket   | Available |
+| ✅ Sliding Log    | Available |
 | 🚧 Leaky Bucket  | Planned   |
 
 ---
@@ -141,7 +161,6 @@ Different endpoints can use different rate-limiting algorithms based on their tr
 
 Future releases will include:
 
-* Sliding Log algorithm
 * Leaky Bucket algorithm
 * Redis storage adapter
 * Additional storage strategies

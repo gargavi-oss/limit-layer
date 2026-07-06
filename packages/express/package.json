@@ -1,6 +1,6 @@
 {
   "name": "@limitlayer/express",
-  "version": "v0.1.0-alpha.5",
+  "version": "v0.1.0-alpha.6",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -37,7 +37,7 @@
     "express": "^5.2.1",
     "supertest": "^7.2.2"
   },
-  "homepage": "https://github.com/gargavi-oss/limit-layer/packages/express#readme",
+  "homepage": "https://github.com/gargavi-oss/limit-layer/blob/main/packages/express/README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gargavi-oss/limit-layer.git"

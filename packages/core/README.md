@@ -14,6 +14,7 @@ A modern, framework-agnostic rate limiting engine for Node.js and TypeScript.
 - ✅ Fixed Window algorithm
 - ✅ Sliding Window algorithm
 - ✅ Token Bucket algorithm
+- ✅ Sliding Log algorithm
 - 💾 Pluggable storage adapters
 - 📦 ESM + CommonJS support
 - 🛠 Fully typed API
@@ -40,6 +41,7 @@ import {
 const limiter = createLimitLayer({
   storage: new MemoryStore(),
   rules: [
+    rules: [
     {
       path: "/login",
       algorithm: "sliding-window",
@@ -54,12 +56,18 @@ const limiter = createLimitLayer({
       window: "1m",
     },
     {
+      path: "/search",
+      algorithm: "sliding-log",
+      limit: 30,
+      window: "1m",
+    },
+    {
       path: "/api/*",
       algorithm: "fixed-window",
       limit: 100,
       window: "1m",
     },
-  ]
+  ],
 });
 
 const result = await limiter.consume({
@@ -82,7 +90,7 @@ console.log(result);
 | ✅ Fixed Window   | Available |
 | ✅ Sliding Window | Available |
 | ✅ Token Bucket  | Available |
-| 🚧 Sliding Log   | Planned   |
+| ✅ Sliding Log   | Available   |
 | 🚧 Leaky Bucket  | Planned   |
 
 ---
@@ -103,6 +111,7 @@ console.log(result);
 
 LimitLayer is designed around a modular architecture where different endpoints can use different rate-limiting strategies.
 
+
 ```ts
 rules: [
   {
@@ -119,6 +128,12 @@ rules: [
     window: "1m",
   },
   {
+    path: "/search",
+    algorithm: "sliding-log",
+    limit: 30,
+    window: "1m",
+  },
+  {
     path: "/api/*",
     algorithm: "fixed-window",
     limit: 100,
@@ -126,6 +141,17 @@ rules: [
   },
 ]
 ```
+
+Different endpoints often have different traffic patterns and security requirements.
+
+For example:
+
+- 🔐 Authentication → Sliding Window
+- 💳 Payments → Token Bucket
+- 🔍 Search APIs → Sliding Log
+- 🌐 General APIs → Fixed Window
+
+LimitLayer lets you configure the most appropriate strategy for each endpoint while keeping a consistent API and developer experience.
 
 This makes it easy to choose the most appropriate algorithm for each endpoint without changing your application's architecture.
 
@@ -135,7 +161,6 @@ This makes it easy to choose the most appropriate algorithm for each endpoint wi
 
 Upcoming features include:
 
-* Sliding Log algorithm
 * Leaky Bucket algorithm
 * Redis storage adapter
 * Additional storage strategies

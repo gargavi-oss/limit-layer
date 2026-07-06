@@ -1,7 +1,7 @@
 {
     "name": "@limitlayer/core",
     "private":false,
-    "version": "v0.1.0-alpha.5",
+    "version": "v0.1.0-alpha.6",
     "type": "module",
     "publishConfig": {
     "access": "public"
@@ -28,7 +28,7 @@
       "dev": "tsup --watch",
       "clean": "rm -rf dist"
     },
-    "homepage": "https://github.com/gargavi-oss/limit-layer/packages/core#readme",
+    "homepage": "https://github.com/gargavi-oss/limit-layer/blob/main/packages/core/README.md",
     "repository": {
       "type": "git",
       "url": "git+https://github.com/gargavi-oss/limit-layer.git"

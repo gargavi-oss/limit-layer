@@ -25,6 +25,7 @@ Whether you're protecting authentication endpoints, public APIs, payment service
 - ✅ Fixed Window algorithm
 - ✅ Sliding Window algorithm
 - ✅ Token Bucket algorithm
+- ✅ Sliding Log algorithm
 * 💾 Pluggable storage architecture
 * 🧠 Extensible algorithm registry
 * 📦 ESM + CommonJS support
@@ -58,6 +59,7 @@ flowchart TD
     FW[Fixed Window]
     SW[Sliding Window]
     TB[Token Bucket]
+    SL[Sliding Log]
 
     STORE[Memory Store]
 
@@ -74,6 +76,7 @@ flowchart TD
     REGISTRY --> FW
     REGISTRY --> SW
     REGISTRY --> TB
+    REGISTRY --> SL
 ```
 
 ---
@@ -130,6 +133,12 @@ const limiter = createLimitLayer({
       window: "1m",
     },
     {
+      path: "/search",
+      algorithm: "sliding-log",
+      limit: 30,
+      window: "1m",
+    },
+    {
       path: "/api/*",
       algorithm: "fixed-window",
       limit: 100,
@@ -179,12 +188,18 @@ app.use(
         window: "1m",
       },
       {
+        path: "/search",
+        algorithm: "sliding-log",
+        limit: 30,
+        window: "1m",
+      },
+      {
         path: "/api/*",
         algorithm: "fixed-window",
         limit: 100,
         window: "1m",
       },
-    ]
+    ],
   })
 );
 
@@ -207,8 +222,15 @@ rules: [
   },
   {
     path: "/payments",
-    algorithm: "fixed-window",
+    algorithm: "token-bucket",
     limit: 20,
+    burst: 40,
+    window: "1m",
+  },
+  {
+    path: "/search",
+    algorithm: "sliding-log",
+    limit: 30,
     window: "1m",
   },
   {
@@ -217,7 +239,7 @@ rules: [
     limit: 100,
     window: "1m",
   },
-]
+],
 ```
 
 Instead of applying one strategy everywhere, LimitLayer lets you choose the most appropriate algorithm for each endpoint while using the same engine and configuration model.
@@ -271,6 +293,7 @@ Additional guides covering storage adapters, custom algorithms, and framework in
 - ✅ Fixed Window
 - ✅ Sliding Window
 - ✅ Token Bucket
+- ✅ Sliding Log
 - ✅ Express adapter
 - ✅ TypeScript support
 - ✅ GitHub Actions
@@ -279,7 +302,6 @@ Additional guides covering storage adapters, custom algorithms, and framework in
 
 ### Upcoming
 
-* Sliding Log
 * Leaky Bucket
 * Redis storage adapter
 * Additional storage adapters
