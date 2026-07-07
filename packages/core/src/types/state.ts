@@ -18,7 +18,7 @@ export interface FixedWindowState {
     lastRefill: number;
   }
   
-  export interface LeakyBucketState {
-    water: number;
-    lastLeak: number;
-  }
+export interface LeakyBucketState {
+  water: number;
+  lastLeak: number;
+}

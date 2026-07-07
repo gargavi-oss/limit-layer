@@ -15,6 +15,7 @@ import { NoMatchingRuleError } from "./errors/no-matching-rule.error.js";
 import { SlidingWindowAlgorithm } from "./algorithms/sliding-window.js";
 import { TokenBucketAlgorithm } from "./algorithms/token-bucket.js";
 import { SlidingLogAlgorithm } from "./algorithms/sliding-log.js";
+import { LeakyBucketAlgorithm } from "./algorithms/leaky-bucket.js";
 
 export class LimitLayer {
   private readonly engine: DecisionEngine;
@@ -71,6 +72,12 @@ export class LimitLayer {
       new SlidingLogAlgorithm()
       );
     }
+    if (!this.registry.has("leaky-bucket")) {
+      this.registry.register(
+        "leaky-bucket",
+        new LeakyBucketAlgorithm()
+    );
+  }
   }
 
   public registerAlgorithm(
