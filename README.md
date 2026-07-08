@@ -66,7 +66,7 @@ flowchart TD
     STORAGE[Storage Adapter]
 
     MEMORY[MemoryStore]
-    REDIS[RedisStore (Planned)]
+    REDIS["RedisStore (Planned)"]
 
     APP --> EXPRESS
     EXPRESS --> CORE
@@ -85,7 +85,7 @@ flowchart TD
     REGISTRY --> LB
 
     STORAGE --> MEMORY
-    STORAGE --> REDIS
+    STORAGE -.-> REDIS
 ```
 
 ---
