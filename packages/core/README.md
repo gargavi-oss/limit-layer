@@ -15,6 +15,7 @@ A modern, framework-agnostic rate limiting engine for Node.js and TypeScript.
 - ✅ Sliding Window algorithm
 - ✅ Token Bucket algorithm
 - ✅ Sliding Log algorithm
+- ✅ Leaky Bucket algorithm
 - 💾 Pluggable storage adapters
 - 📦 ESM + CommonJS support
 - 🛠 Fully typed API
@@ -41,7 +42,6 @@ import {
 const limiter = createLimitLayer({
   storage: new MemoryStore(),
   rules: [
-    rules: [
     {
       path: "/login",
       algorithm: "sliding-window",
@@ -62,6 +62,13 @@ const limiter = createLimitLayer({
       window: "1m",
     },
     {
+      path: "/webhooks/*",
+      algorithm: "leaky-bucket",
+      limit: 60,
+      burst: 100,
+      window: "1m",
+    },
+    {
       path: "/api/*",
       algorithm: "fixed-window",
       limit: 100,
@@ -69,7 +76,6 @@ const limiter = createLimitLayer({
     },
   ],
 });
-
 const result = await limiter.consume({
   method: "POST",
   path: "/login",
@@ -77,8 +83,7 @@ const result = await limiter.consume({
   headers: {},
   query: {},
 });
-
-console.log(result);
+console.log(result); 
 ```
 
 ---
@@ -90,8 +95,8 @@ console.log(result);
 | ✅ Fixed Window   | Available |
 | ✅ Sliding Window | Available |
 | ✅ Token Bucket  | Available |
-| ✅ Sliding Log   | Available   |
-| 🚧 Leaky Bucket  | Planned   |
+| ✅ Sliding Log   | Available  |
+| ✅ Leaky Bucket  | Available  |
 
 ---
 
@@ -114,32 +119,39 @@ LimitLayer is designed around a modular architecture where different endpoints c
 
 ```ts
 rules: [
-  {
-    path: "/login",
-    algorithm: "sliding-window",
-    limit: 5,
-    window: "1m",
-  },
-  {
-    path: "/payments",
-    algorithm: "token-bucket",
-    limit: 20,
-    burst: 40,
-    window: "1m",
-  },
-  {
-    path: "/search",
-    algorithm: "sliding-log",
-    limit: 30,
-    window: "1m",
-  },
-  {
-    path: "/api/*",
-    algorithm: "fixed-window",
-    limit: 100,
-    window: "1m",
-  },
-]
+    {
+      path: "/login",
+      algorithm: "sliding-window",
+      limit: 5,
+      window: "1m",
+    },
+    {
+      path: "/payments",
+      algorithm: "token-bucket",
+      limit: 20,
+      burst: 40,
+      window: "1m",
+    },
+    {
+      path: "/search",
+      algorithm: "sliding-log",
+      limit: 30,
+      window: "1m",
+    },
+    {
+      path: "/webhooks/*",
+      algorithm: "leaky-bucket",
+      limit: 60,
+      burst: 100,
+      window: "1m",
+    },
+    {
+      path: "/api/*",
+      algorithm: "fixed-window",
+      limit: 100,
+      window: "1m",
+    },
+],
 ```
 
 Different endpoints often have different traffic patterns and security requirements.
@@ -161,7 +173,6 @@ This makes it easy to choose the most appropriate algorithm for each endpoint wi
 
 Upcoming features include:
 
-* Leaky Bucket algorithm
 * Redis storage adapter
 * Additional storage strategies
 * Performance benchmarking

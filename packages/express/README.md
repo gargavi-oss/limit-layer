@@ -25,7 +25,6 @@ import { MemoryStore } from "@limitlayer/core";
 import { limitLayer } from "@limitlayer/express";
 
 const app = express();
-
 app.use(
   limitLayer({
     storage: new MemoryStore(),
@@ -50,6 +49,13 @@ app.use(
         window: "1m",
       },
       {
+        path: "/webhooks/*",
+        algorithm: "leaky-bucket",
+        limit: 60,
+        burst: 100,
+        window: "1m",
+      },
+      {
         path: "/api/*",
         algorithm: "fixed-window",
         limit: 100,
@@ -59,17 +65,29 @@ app.use(
   })
 );
 
-app.post("/login", (_req, res) => {
-  res.json({
-    success: true,
-  });
+app.post("/login", (_, res) => {
+  res.json({ success: true });
 });
 
-app.get("/api/users", (_req, res) => {
+app.post("/payments", (_, res) => {
+  res.json({ success: true });
+});
+
+app.get("/search", (_, res) => {
   res.json([]);
 });
 
-app.listen(3000);
+app.post("/webhooks/github", (_, res) => {
+  res.sendStatus(200);
+});
+
+app.get("/api/users", (_, res) => {
+  res.json([]);
+});
+
+app.listen(3000, () => {
+  console.log("Server running on http://localhost:3000");
+});
 ```
 
 ---
@@ -83,6 +101,7 @@ app.listen(3000);
 - ✅ Sliding Window algorithm
 - ✅ Token Bucket algorithm
 - ✅ Sliding Log algorithm
+- ✅ Leaky Bucket algorithm
 - 📦 ESM + CommonJS support
 - 🛠 Fully typed with TypeScript
 - 📋 Standard RateLimit response headers
@@ -110,7 +129,7 @@ Retry-After
 app.use(
   limitLayer({
     storage: new MemoryStore(),
-        rules: [
+    rules: [
       {
         path: "/login",
         algorithm: "sliding-window",
@@ -128,6 +147,13 @@ app.use(
         path: "/search",
         algorithm: "sliding-log",
         limit: 30,
+        window: "1m",
+      },
+      {
+        path: "/webhooks/*",
+        algorithm: "leaky-bucket",
+        limit: 60,
+        burst: 100,
         window: "1m",
       },
       {
@@ -153,7 +179,7 @@ Different endpoints can use different rate-limiting algorithms based on their tr
 | ✅ Sliding Window | Available |
 | ✅ Token Bucket   | Available |
 | ✅ Sliding Log    | Available |
-| 🚧 Leaky Bucket  | Planned   |
+| ✅ Leaky Bucket  | Available  |
 
 ---
 
@@ -161,7 +187,6 @@ Different endpoints can use different rate-limiting algorithms based on their tr
 
 Future releases will include:
 
-* Leaky Bucket algorithm
 * Redis storage adapter
 * Additional storage strategies
 * Fastify adapter

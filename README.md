@@ -26,6 +26,7 @@ Whether you're protecting authentication endpoints, public APIs, payment service
 - ✅ Sliding Window algorithm
 - ✅ Token Bucket algorithm
 - ✅ Sliding Log algorithm
+- ✅ Leaky Bucket algorithm
 * 💾 Pluggable storage architecture
 * 🧠 Extensible algorithm registry
 * 📦 ESM + CommonJS support
@@ -60,8 +61,12 @@ flowchart TD
     SW[Sliding Window]
     TB[Token Bucket]
     SL[Sliding Log]
+    LB[Leaky Bucket]
 
-    STORE[Memory Store]
+    STORAGE[Storage Adapter]
+
+    MEMORY[MemoryStore]
+    REDIS[RedisStore (Planned)]
 
     APP --> EXPRESS
     EXPRESS --> CORE
@@ -71,12 +76,16 @@ flowchart TD
 
     ENGINE --> MATCHER
     ENGINE --> REGISTRY
-    ENGINE --> STORE
+    ENGINE --> STORAGE
 
     REGISTRY --> FW
     REGISTRY --> SW
     REGISTRY --> TB
     REGISTRY --> SL
+    REGISTRY --> LB
+
+    STORAGE --> MEMORY
+    STORAGE -.-> REDIS
 ```
 
 ---
@@ -115,7 +124,6 @@ import {
   MemoryStore,
   createLimitLayer,
 } from "@limitlayer/core";
-
 const limiter = createLimitLayer({
   storage: new MemoryStore(),
   rules: [
@@ -139,6 +147,13 @@ const limiter = createLimitLayer({
       window: "1m",
     },
     {
+      path: "/webhooks/*",
+      algorithm: "leaky-bucket",
+      limit: 60,
+      burst: 100,
+      window: "1m",
+    },
+    {
       path: "/api/*",
       algorithm: "fixed-window",
       limit: 100,
@@ -146,7 +161,6 @@ const limiter = createLimitLayer({
     },
   ],
 });
-
 const result = await limiter.consume({
   method: "POST",
   path: "/login",
@@ -154,7 +168,6 @@ const result = await limiter.consume({
   headers: {},
   query: {},
 });
-
 console.log(result);
 ```
 
@@ -169,7 +182,6 @@ import { MemoryStore } from "@limitlayer/core";
 import { limitLayer } from "@limitlayer/express";
 
 const app = express();
-
 app.use(
   limitLayer({
     storage: new MemoryStore(),
@@ -194,6 +206,13 @@ app.use(
         window: "1m",
       },
       {
+        path: "/webhooks/*",
+        algorithm: "leaky-bucket",
+        limit: 60,
+        burst: 100,
+        window: "1m",
+      },
+      {
         path: "/api/*",
         algorithm: "fixed-window",
         limit: 100,
@@ -203,7 +222,29 @@ app.use(
   })
 );
 
-app.listen(3000);
+app.post("/login", (_, res) => {
+  res.json({ success: true });
+});
+
+app.post("/payments", (_, res) => {
+  res.json({ success: true });
+});
+
+app.get("/search", (_, res) => {
+  res.json([]);
+});
+
+app.post("/webhooks/github", (_, res) => {
+  res.sendStatus(200);
+});
+
+app.get("/api/users", (_, res) => {
+  res.json([]);
+});
+
+app.listen(3000, () => {
+  console.log("Server running on http://localhost:3000");
+});
 ```
 
 ---
@@ -214,35 +255,42 @@ Different endpoints often require different rate-limiting strategies.
 
 ```ts
 rules: [
-  {
-    path: "/login",
-    algorithm: "sliding-window",
-    limit: 5,
-    window: "1m",
-  },
-  {
-    path: "/payments",
-    algorithm: "token-bucket",
-    limit: 20,
-    burst: 40,
-    window: "1m",
-  },
-  {
-    path: "/search",
-    algorithm: "sliding-log",
-    limit: 30,
-    window: "1m",
-  },
-  {
-    path: "/api/*",
-    algorithm: "fixed-window",
-    limit: 100,
-    window: "1m",
-  },
-],
+      {
+        path: "/login",
+        algorithm: "sliding-window",
+        limit: 5,
+        window: "1m",
+      },
+      {
+        path: "/payments",
+        algorithm: "token-bucket",
+        limit: 20,
+        burst: 40,
+        window: "1m",
+      },
+      {
+        path: "/search",
+        algorithm: "sliding-log",
+        limit: 30,
+        window: "1m",
+      },
+      {
+        path: "/webhooks/*",
+        algorithm: "leaky-bucket",
+        limit: 60,
+        burst: 100,
+        window: "1m",
+      },
+      {
+        path: "/api/*",
+        algorithm: "fixed-window",
+        limit: 100,
+        window: "1m",
+      },
+  ],
 ```
 
-Instead of applying one strategy everywhere, LimitLayer lets you choose the most appropriate algorithm for each endpoint while using the same engine and configuration model.
+> 💡 LimitLayer allows different endpoints to use different rate-limiting algorithms within the same application. Choose the strategy that best fits each endpoint's traffic patterns and requirements.
 
 ---
 
@@ -252,9 +300,9 @@ Instead of applying one strategy everywhere, LimitLayer lets you choose the most
 | ---------------- | --------- |
 | ✅ Fixed Window   | Available |
 | ✅ Sliding Window | Available |
-| ✅ Token Bucket  | Available   |
-| 🚧 Sliding Log   | Planned   |
-| 🚧 Leaky Bucket  | Planned   |
+| ✅ Token Bucket  | Available  |
+| ✅ Sliding Log   | Available  |
+| ✅ Leaky Bucket  | Available  |
 
 ---
 
@@ -284,9 +332,7 @@ Additional guides covering storage adapters, custom algorithms, and framework in
 
 ---
 
-# 🛣️ Roadmap
-
-### v0.1
+### v0.2
 
 - ✅ Core engine
 - ✅ MemoryStore
@@ -294,6 +340,7 @@ Additional guides covering storage adapters, custom algorithms, and framework in
 - ✅ Sliding Window
 - ✅ Token Bucket
 - ✅ Sliding Log
+- ✅ Leaky Bucket
 - ✅ Express adapter
 - ✅ TypeScript support
 - ✅ GitHub Actions
@@ -302,7 +349,6 @@ Additional guides covering storage adapters, custom algorithms, and framework in
 
 ### Upcoming
 
-* Leaky Bucket
 * Redis storage adapter
 * Additional storage adapters
 * Performance benchmarks
