@@ -10,9 +10,17 @@ import {
 import { RedisStore } from "../src/storage/redis.js";
 
 describe("RedisStore Integration", () => {
-  const store = new RedisStore({
-    url: "redis://localhost:6379",
+let store: RedisStore;
+
+beforeAll(async () => {
+  store = new RedisStore({
+    url:
+      process.env.REDIS_URL ??
+      "redis://localhost:6379",
   });
+
+  await store.clear();
+});
 
   beforeAll(async () => {
     await store.clear();
