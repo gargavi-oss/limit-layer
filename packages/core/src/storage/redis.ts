@@ -5,17 +5,9 @@ import {
 
 import type { StorageAdapter } from "../types/storage.js";
 
-export interface RedisStoreOptions {
-  /**
-   * Existing Redis client.
-   * If omitted, a client will be created using `url`.
-   */
-  client?: RedisClientType;
 
-  /**
-   * Redis connection URL.
-   * Example: redis://localhost:6379
-   */
+export interface RedisStoreOptions {
+  client?: RedisClientType;
   url?: string;
 }
 
@@ -23,6 +15,8 @@ export class RedisStore implements StorageAdapter {
   private readonly client: RedisClientType;
 
   private readonly ownsClient: boolean;
+
+  private connectionPromise?: Promise<void>;
 
   constructor(options: RedisStoreOptions = {}) {
     if (options.client) {
@@ -38,20 +32,32 @@ export class RedisStore implements StorageAdapter {
       this.client.on("error", (error) => {
         console.error("[LimitLayer Redis]", error);
       });
-
-      // Fire-and-forget connection
-      void this.client.connect();
     }
   }
 
-  async get<T>(key: string): Promise<T | null> {
+private async ensureConnected(): Promise<void> {
+  if (this.client.isOpen) {
+    return;
+  }
+
+  if (!this.connectionPromise) {
+    this.connectionPromise = this.client
+      .connect()
+      .then(() => {})
+      .finally(() => {
+        this.connectionPromise = undefined;
+      });
+  }
+
+  await this.connectionPromise;
+}
+
+  async get<T>(key: string): Promise<T |null> {
+    await this.ensureConnected();
+
     const value = await this.client.get(key);
 
-    if (value === null) {
-      return null;
-    }
-
-    return JSON.parse(value) as T;
+    return value ? (JSON.parse(value) as T) : null;
   }
 
   async set<T>(
@@ -59,13 +65,14 @@ export class RedisStore implements StorageAdapter {
     value: T,
     ttl?: number
   ): Promise<void> {
+    await this.ensureConnected();
+
     const serialized = JSON.stringify(value);
 
     if (ttl !== undefined) {
       await this.client.set(key, serialized, {
         PX: Math.max(1, Math.ceil(ttl)),
       });
-
       return;
     }
 
@@ -73,23 +80,30 @@ export class RedisStore implements StorageAdapter {
   }
 
   async delete(key: string): Promise<void> {
+    await this.ensureConnected();
+
     await this.client.del(key);
   }
 
+  
+
   async has(key: string): Promise<boolean> {
+    await this.ensureConnected();
+
     return (await this.client.exists(key)) === 1;
   }
 
   async clear(): Promise<void> {
+    await this.ensureConnected();
+
     await this.client.flushDb();
   }
 
-  /**
-   * Disconnect the Redis client if this store created it.
-   */
-  async disconnect(): Promise<void> {
-    if (this.ownsClient && this.client.isOpen) {
-      await this.client.quit();
-    }
+async disconnect(): Promise<void> {
+  if (this.ownsClient && this.client.isOpen) {
+    await this.client.quit();
   }
+
+  this.connectionPromise = undefined;
+}
 }
