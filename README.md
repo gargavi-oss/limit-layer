@@ -347,7 +347,7 @@ rules: [
 | Storage          | Status    |
 | ---------------- | --------- |
 | ✅ MemoryStore    | Available |
-| 🚧 RedisStore    | Planned   |
+| ✅ RedisStore    | Available  |
 | 🚧 Upstash Redis | Planned   |
 | 🚧 PostgreSQL    | Planned   |
 | 🚧 MongoDB       | Planned   |
@@ -358,11 +358,12 @@ rules: [
 
 Learn more about LimitLayer through the project documentation.
 
-| Guide                                           | Description                                           |
-| ----------------------------------------------- | ----------------------------------------------------- |
-| 📖 [Getting Started](./docs/getting-started.md) | Installation, configuration and first limiter         |
-| 🏗️ [Architecture](./docs/architecture.md)      | Understand the internal architecture and request flow |
-| 🧠 [Algorithms](./docs/algorithms.md)           | Learn how each algorithm works and when to use it     |
+| Guide | Description |
+| ----------------------------------------------- | -------------------------------------------------------------- |
+| 📖 [Getting Started](./docs/getting-started.md) | Installation, configuration, and your first rate limiter |
+| 🏗️ [Architecture](./docs/architecture.md) | Understand the internal architecture and request flow |
+| 🧠 [Algorithms](./docs/algorithms.md) | Learn how each algorithm works and when to use it |
+| 💾 [Storage Adapters](./docs/storage.md) | Configure MemoryStore, RedisStore, and create custom storage adapters |
 
 Additional guides covering storage adapters, custom algorithms, and framework integrations will be added in future releases.
 

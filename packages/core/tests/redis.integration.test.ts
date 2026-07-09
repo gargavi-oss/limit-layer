@@ -22,9 +22,6 @@ beforeAll(async () => {
   await store.clear();
 });
 
-  beforeAll(async () => {
-    await store.clear();
-  });
 
   beforeEach(async () => {
     await store.clear();

@@ -101,10 +101,10 @@ Algorithms remain independent of where their state is stored.
 Current storage:
 
 * MemoryStore
+* Redis
 
 Planned storage:
 
-* Redis
 * Upstash Redis
 * PostgreSQL
 * MongoDB
