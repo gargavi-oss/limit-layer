@@ -12,6 +12,17 @@ jobs:
       contents: read
       id-token: write
 
+    services:
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
     steps:
       - uses: actions/checkout@v4
 
@@ -19,9 +30,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-            node-version: 22
-            cache: "pnpm"
-            registry-url: "https://registry.npmjs.org"
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -30,6 +41,8 @@ jobs:
         run: pnpm build
 
       - name: Run tests
+        env:
+          REDIS_URL: redis://localhost:6379
         run: pnpm test
 
       - name: Publish Core
