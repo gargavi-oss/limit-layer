@@ -1,14 +1,19 @@
 {
   "name": "@limitlayer/core",
+  "version": "0.2.0-alpha.2",
   "private": false,
-  "version": "v0.2.0-alpha.2",
+  "description": "Framework-agnostic rate limiting engine for Node.js and TypeScript supporting Fixed Window, Sliding Window, Token Bucket, Sliding Log, Leaky Bucket, MemoryStore, and RedisStore.",
+  "license": "MIT",
   "type": "module",
+
   "publishConfig": {
     "access": "public"
   },
+
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -16,38 +21,52 @@
       "require": "./dist/index.cjs"
     }
   },
+
   "files": [
     "dist"
   ],
+
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "clean": "rm -rf dist"
   },
-  "homepage": "https://github.com/gargavi-oss/limit-layer/blob/main/packages/core/README.md",
+
+  "homepage": "https://github.com/gargavi-oss/limit-layer",
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gargavi-oss/limit-layer.git"
   },
+
   "bugs": {
-    "url": "https://github.com/gargavi-oss/limit-layer"
+    "url": "https://github.com/gargavi-oss/limit-layer/issues"
   },
+
   "keywords": [
+    "limitlayer",
+    "limit-layer",
     "rate-limit",
     "rate-limiter",
     "rate-limiting",
-    "token-bucket",
-    "sliding-window",
-    "fixed-window",
+    "nodejs",
     "typescript",
-    "node",
     "backend",
     "api",
+    "rest-api",
+    "security",
     "middleware",
-    "express",
-    "security"
+    "fixed-window",
+    "sliding-window",
+    "token-bucket",
+    "sliding-log",
+    "leaky-bucket",
+    "memory-store",
+    "redis",
+    "redis-store",
+    "distributed-rate-limit"
   ],
-  "license": "MIT",
+
   "dependencies": {
     "redis": "^6.1.0"
   }

@@ -1,11 +1,11 @@
 {
   "name": "@limitlayer/express",
-  "version": "v0.2.0-alpha.2",
+  "version": "0.2.0-alpha.2",
   "private": false,
   "publishConfig": {
     "access": "public"
   },
-  "description": "Official Express adapter for LimitLayer",
+ "description": "Official Express middleware for LimitLayer, supporting Fixed Window, Sliding Window, Token Bucket, Sliding Log, Leaky Bucket, MemoryStore, and RedisStore.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -45,19 +45,27 @@
   "bugs": {
     "url": "https://github.com/gargavi-oss/limit-layer"
   },
-  "keywords": [
+"keywords": [
   "express",
-  "middleware",
+  "express-middleware",
+  "express-rate-limit",
+  "express-rate-limiter",
   "rate-limit",
   "rate-limiter",
   "rate-limiting",
-  "token-bucket",
-  "sliding-window",
-  "fixed-window",
+  "nodejs",
   "typescript",
-  "node",
+  "middleware",
   "api",
-  "backend"
+  "rest-api",
+  "fixed-window",
+  "sliding-window",
+  "token-bucket",
+  "sliding-log",
+  "leaky-bucket",
+  "redis",
+  "limitlayer",
+  "limit-layer"
 ],
    "license": "MIT"
 }
