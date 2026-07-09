@@ -18,23 +18,23 @@ Whether you're protecting authentication endpoints, public APIs, payment service
 
 # ✨ Features
 
-* 🚀 Framework-agnostic core
-* ⚡ High-performance TypeScript implementation
-* 🎯 Per-route algorithm selection
-* 🧩 Modular architecture
-- ✅ Fixed Window algorithm
-- ✅ Sliding Window algorithm
-- ✅ Token Bucket algorithm
-- ✅ Sliding Log algorithm
-- ✅ Leaky Bucket algorithm
-* 💾 Pluggable storage architecture
-* 🧠 Extensible algorithm registry
-* 📦 ESM + CommonJS support
-* 🛠 Fully typed public API
-* 🚀 Official Express adapter
-* 📖 Simple declarative configuration
-* 🧪 Unit tested
-* ⚙️ GitHub Actions CI
+- 🚀 Framework-agnostic core
+- ⚡ High-performance TypeScript implementation
+- 🎯 Per-route algorithm selection
+- 🧩 Modular and extensible architecture
+- ✅ Fixed Window
+- ✅ Sliding Window
+- ✅ Token Bucket
+- ✅ Sliding Log
+- ✅ Leaky Bucket
+- 💾 Pluggable storage adapters
+- 🧠 Extensible algorithm registry
+- 📦 ESM + CommonJS support
+- 🛠 Fully typed API
+- 🚀 Official Express middleware
+- 📖 Declarative configuration
+- 🧪 Comprehensive unit tests
+- ⚙️ GitHub Actions CI
 
 ---
 
@@ -66,7 +66,7 @@ flowchart TD
     STORAGE[Storage Adapter]
 
     MEMORY[MemoryStore]
-    REDIS["RedisStore (Planned)"]
+    REDIS[RedisStore]
 
     APP --> EXPRESS
     EXPRESS --> CORE
@@ -85,7 +85,7 @@ flowchart TD
     REGISTRY --> LB
 
     STORAGE --> MEMORY
-    STORAGE -.-> REDIS
+    STORAGE --> REDIS
 ```
 
 ---
@@ -115,6 +115,11 @@ npm install @limitlayer/core
 npm install express @limitlayer/core @limitlayer/express
 ```
 
+### Redis Support
+
+```bash
+npm install redis
+```
 ---
 
 # ⚡ Quick Start
@@ -249,6 +254,27 @@ app.listen(3000, () => {
 
 ---
 
+## Redis Example
+
+```ts
+import { RedisStore } from "@limitlayer/core";
+
+const limiter = createLimitLayer({
+  storage: new RedisStore({
+    url: process.env.REDIS_URL!,
+  }),
+  rules: [
+    {
+      path: "/api/*",
+      algorithm: "token-bucket",
+      limit: 100,
+      burst: 200,
+      window: "1m",
+    },
+  ],
+});
+```
+
 # 🎯 Why LimitLayer?
 
 Different endpoints often require different rate-limiting strategies.
@@ -289,6 +315,16 @@ rules: [
       },
   ],
 ```
+
+# 🚦 Choose the Right Algorithm
+
+| Algorithm | Best For |
+|-----------|----------|
+| Fixed Window | Simple APIs |
+| Sliding Window | Login endpoints |
+| Token Bucket | Public APIs with burst traffic |
+| Sliding Log | Security-sensitive endpoints |
+| Leaky Bucket | Webhooks, queues, smoothing bursts |
 
 > 💡 LimitLayer allows different endpoints to use different rate-limiting algorithms within the same application. Choose the strategy that best fits each endpoint's traffic patterns and requirements.
 
@@ -336,6 +372,7 @@ Additional guides covering storage adapters, custom algorithms, and framework in
 
 - ✅ Core engine
 - ✅ MemoryStore
+- ✅ RedisStore
 - ✅ Fixed Window
 - ✅ Sliding Window
 - ✅ Token Bucket
@@ -349,20 +386,22 @@ Additional guides covering storage adapters, custom algorithms, and framework in
 
 ### Upcoming
 
-* Redis storage adapter
-* Additional storage adapters
-* Performance benchmarks
-* More examples
+- Upstash Redis adapter
+- PostgreSQL adapter
+- MongoDB adapter
+- Performance benchmarking
+- Load testing
+- More examples
 
 ### Future
 
-* Fastify adapter
-* Hono adapter
-* Koa adapter
-* NestJS integration
-* Next.js integration
-* Analytics dashboard
-* Hosted SaaS platform
+- Fastify adapter
+- Hono adapter
+- Koa adapter
+- NestJS adapter
+- Next.js adapter
+- Analytics dashboard
+- Hosted SaaS platform
 
 ---
 
