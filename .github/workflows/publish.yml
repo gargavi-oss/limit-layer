@@ -40,17 +40,35 @@ jobs:
       - name: Build packages
         run: pnpm build
 
+      - name: Install Redis CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y redis-tools
+
+      - name: Wait for Redis
+        run: |
+          for i in {1..30}; do
+            redis-cli -h localhost -p 6379 ping && exit 0
+            echo "Waiting for Redis..."
+            sleep 1
+          done
+          echo "Redis failed to start"
+          exit 1
+
+      - name: List Docker containers
+        run: docker ps -a
+
       - name: Run tests
         env:
           REDIS_URL: redis://localhost:6379
         run: pnpm test
 
       - name: Publish Core
-        run: pnpm --filter @limitlayer/core publish --no-git-checks
+        run: pnpm --filter @limitlayer/core publish --no-git-checks --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish Express
-        run: pnpm --filter @limitlayer/express publish --no-git-checks
+        run: pnpm --filter @limitlayer/express publish --no-git-checks --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
