@@ -1,55 +1,54 @@
 {
-    "name": "@limitlayer/core",
-    "private":false,
-    "version": "v0.2.0-alpha.1",
-    "type": "module",
-    "publishConfig": {
+  "name": "@limitlayer/core",
+  "private": false,
+  "version": "v0.2.0-alpha.1",
+  "type": "module",
+  "publishConfig": {
     "access": "public"
   },
-  
-    "main": "./dist/index.cjs",
-    "module": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-  
-    "exports": {
-      ".": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.js",
-        "require": "./dist/index.cjs"
-      }
-    },
-  
-    "files": [
-      "dist"
-    ],
-  
-    "scripts": {
-      "build": "tsup",
-      "dev": "tsup --watch",
-      "clean": "rm -rf dist"
-    },
-    "homepage": "https://github.com/gargavi-oss/limit-layer/blob/main/packages/core/README.md",
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/gargavi-oss/limit-layer.git"
-    },
-    "bugs": {
-      "url": "https://github.com/gargavi-oss/limit-layer"
-    },
-    "keywords": [
-  "rate-limit",
-  "rate-limiter",
-  "rate-limiting",
-  "token-bucket",
-  "sliding-window",
-  "fixed-window",
-  "typescript",
-  "node",
-  "backend",
-  "api",
-  "middleware",
-  "express",
-  "security"
-],
-     "license": "MIT"
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist"
+  },
+  "homepage": "https://github.com/gargavi-oss/limit-layer/blob/main/packages/core/README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gargavi-oss/limit-layer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gargavi-oss/limit-layer"
+  },
+  "keywords": [
+    "rate-limit",
+    "rate-limiter",
+    "rate-limiting",
+    "token-bucket",
+    "sliding-window",
+    "fixed-window",
+    "typescript",
+    "node",
+    "backend",
+    "api",
+    "middleware",
+    "express",
+    "security"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "redis": "^6.1.0"
   }
+}

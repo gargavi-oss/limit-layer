@@ -60,7 +60,7 @@ export class LimitLayer {
         new SlidingWindowAlgorithm()
       );  
     }
-    if(!this.registry.has("tocken-bucket")){
+    if(!this.registry.has("token-bucket")){
       this.registry.register(
       "token-bucket",
       new TokenBucketAlgorithm()
