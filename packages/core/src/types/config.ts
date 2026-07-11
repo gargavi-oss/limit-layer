@@ -1,3 +1,4 @@
+import { LLRequest } from "./request.js";
 import type { Rule } from "./rule.js";
 import type { StorageAdapter } from "./storage.js";
 

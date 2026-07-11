@@ -1,37 +1,51 @@
 # @limitlayer/core
 
-A modern, framework-agnostic rate limiting engine for Node.js and TypeScript.
+> A modern, framework-agnostic rate limiting engine for Node.js and TypeScript.
 
-`@limitlayer/core` is the foundation of the **LimitLayer** ecosystem. It provides a flexible, extensible rate-limiting engine that works with any framework or runtime, including Express, Fastify, Hono, GraphQL, WebSockets, background workers, RPC services, and custom applications.
+`@limitlayer/core` is the foundation of the **LimitLayer** ecosystem. It provides a fast, extensible, and framework-agnostic rate limiting engine that works with Express, Fastify, Hono, GraphQL, WebSockets, RPC services, background workers, API gateways, and custom applications.
+
+Built with TypeScript from the ground up, LimitLayer supports multiple rate-limiting algorithms, pluggable storage adapters, distributed Redis deployments, and per-route configuration—all through a clean and consistent API.
 
 ---
 
-## Features
+## ✨ Features
+
+### Core
 
 - 🚀 Framework-agnostic architecture
 - ⚡ High-performance TypeScript implementation
-- 🧩 Pluggable rate-limiting algorithms
-- 💾 Multiple storage adapters
+- 🧩 Per-route algorithm selection
+- 🔑 Custom key generators
+- 💾 Pluggable storage adapters
+- 🌐 Distributed rate limiting with Redis
+- 📦 ESM + CommonJS support
+- 🛠 Fully typed API
+- 🔧 Extensible architecture
+
+### Built-in Algorithms
+
 - ✅ Fixed Window
 - ✅ Sliding Window
 - ✅ Token Bucket
 - ✅ Sliding Log
 - ✅ Leaky Bucket
+
+### Storage Adapters
+
 - ✅ MemoryStore
 - ✅ RedisStore
-- 📦 ESM + CommonJS support
-- 🛠 Fully typed API
-- 🔧 Extensible architecture for custom algorithms and storage adapters
 
 ---
 
-## Installation
+# 📦 Installation
+
+Install the core package:
 
 ```bash
 npm install @limitlayer/core
 ```
 
-For Redis support:
+For distributed rate limiting with Redis:
 
 ```bash
 npm install redis
@@ -39,7 +53,7 @@ npm install redis
 
 ---
 
-## Quick Start
+# ⚡ Quick Start
 
 ```ts
 import {
@@ -49,6 +63,7 @@ import {
 
 const limiter = createLimitLayer({
   storage: new MemoryStore(),
+
   rules: [
     {
       path: "/login",
@@ -98,7 +113,7 @@ console.log(result);
 
 ---
 
-## Redis Example
+# 🌐 Distributed Rate Limiting with Redis
 
 ```ts
 import {
@@ -108,8 +123,9 @@ import {
 
 const limiter = createLimitLayer({
   storage: new RedisStore({
-    url: "redis://localhost:6379",
+    url: process.env.REDIS_URL,
   }),
+
   rules: [
     {
       path: "/api/*",
@@ -122,24 +138,60 @@ const limiter = createLimitLayer({
 });
 ```
 
----
-
-## Built-in Algorithms
-
-| Algorithm | Status |
-|-----------|--------|
-| ✅ Fixed Window | Available |
-| ✅ Sliding Window | Available |
-| ✅ Token Bucket | Available |
-| ✅ Sliding Log | Available |
-| ✅ Leaky Bucket | Available |
+Using Redis allows multiple application instances to share the same rate-limiting state, making LimitLayer suitable for horizontally scaled deployments.
 
 ---
 
-## Storage Adapters
+# 🔑 Custom Key Generator
+
+Rate limit by IP, user ID, tenant, API key, or any custom identifier.
+
+```ts
+const limiter = createLimitLayer({
+  storage: new MemoryStore(),
+
+  rules: [
+    {
+      path: "/api/*",
+      algorithm: "token-bucket",
+      limit: 100,
+      window: "1m",
+
+      keyGenerator(request) {
+        return request.headers["x-api-key"] as string;
+      },
+    },
+  ],
+});
+```
+
+Examples include:
+
+- User ID
+- API Key
+- Organization ID
+- Tenant ID
+- Session ID
+- IP Address
+
+---
+
+# 🧠 Built-in Algorithms
+
+| Algorithm | Best For |
+|------------|----------|
+| ✅ Fixed Window | Public APIs |
+| ✅ Sliding Window | Authentication & Login |
+| ✅ Token Bucket | Payments & APIs with bursts |
+| ✅ Sliding Log | Search APIs |
+| ✅ Leaky Bucket | Webhooks & Queue-like traffic |
+
+---
+
+# 💾 Storage Adapters
 
 | Storage | Status |
-|---------|--------|
+|----------|--------|
 | ✅ MemoryStore | Available |
 | ✅ RedisStore | Available |
 | 🚧 Upstash Redis | Planned |
@@ -148,9 +200,11 @@ const limiter = createLimitLayer({
 
 ---
 
-## Why LimitLayer?
+# 🎯 Why LimitLayer?
 
-Different endpoints often require different rate-limiting strategies.
+Most rate limiting libraries force you to use one algorithm across your entire application.
+
+LimitLayer lets every endpoint choose the strategy that best matches its traffic patterns.
 
 ```ts
 rules: [
@@ -189,48 +243,95 @@ rules: [
 ]
 ```
 
-Examples:
+Typical recommendations:
 
-- 🔐 Authentication → Sliding Window
-- 💳 Payments → Token Bucket
-- 🔍 Search → Sliding Log
-- 🔄 Webhooks → Leaky Bucket
-- 🌐 General APIs → Fixed Window
+| Endpoint | Recommended Algorithm |
+|----------|-----------------------|
+| 🔐 Authentication | Sliding Window |
+| 💳 Payments | Token Bucket |
+| 🔍 Search | Sliding Log |
+| 🔄 Webhooks | Leaky Bucket |
+| 🌐 Public APIs | Fixed Window |
 
-LimitLayer allows every endpoint to use the algorithm that best matches its traffic pattern while keeping a consistent API and configuration model.
-
----
-
-## Roadmap
-
-Upcoming features:
-
-- Upstash Redis adapter
-- PostgreSQL adapter
-- MongoDB adapter
-- Performance benchmarking
-- Additional framework adapters
-- Custom metrics and analytics
+This modular approach allows applications to use the most suitable algorithm for every endpoint without changing architecture or middleware.
 
 ---
 
-## Related Packages
+# 🚀 Performance
 
-- **@limitlayer/core** — Framework-agnostic rate limiting engine
-- **@limitlayer/express** — Official Express middleware
+LimitLayer is designed for production workloads.
 
-The LimitLayer ecosystem will continue to grow with additional framework adapters and storage backends.
+- Lightweight architecture
+- Minimal allocations
+- Async storage adapters
+- Redis support for distributed deployments
+- Per-route algorithm selection
+- Fully typed TypeScript API
 
----
-
-## Documentation
-
-Complete documentation, examples, contribution guidelines, and the project roadmap are available in the main repository:
-
-**GitHub:** https://github.com/gargavi-oss/limit-layer
+Benchmark results will be published in future releases.
 
 ---
 
-## License
+# 🛣️ Roadmap
+
+### Storage
+
+- 🚧 Upstash Redis
+- 🚧 PostgreSQL
+- 🚧 MongoDB
+
+### Frameworks
+
+- 🚧 Fastify
+- 🚧 Hono
+- 🚧 Koa
+- 🚧 NestJS
+
+### Features
+
+- 🚧 Performance benchmarks
+- 🚧 Prometheus metrics
+- 🚧 OpenTelemetry integration
+- 🚧 Analytics dashboard
+- 🚧 Additional algorithms
+
+---
+
+# 📚 Documentation
+
+Complete documentation, examples, architecture guides, and contribution guidelines are available in the main repository.
+
+**GitHub**
+
+https://github.com/gargavi-oss/limit-layer
+
+---
+
+# 📦 Related Packages
+
+| Package | Description |
+|----------|-------------|
+| **@limitlayer/core** | Framework-agnostic rate limiting engine |
+| **@limitlayer/express** | Official Express middleware |
+
+More adapters will be added as the LimitLayer ecosystem grows.
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome.
+
+Whether you're fixing bugs, improving documentation, implementing algorithms, adding storage adapters, or building framework integrations, your contributions are appreciated.
+
+Please read the contribution guidelines before opening a Pull Request.
+
+---
+
+# 📄 License
 
 MIT
+
+---
+
+Built with ❤️ in TypeScript.

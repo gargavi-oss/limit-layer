@@ -1,39 +1,47 @@
 # @limitlayer/express
 
-Official Express middleware for the **LimitLayer** rate limiting toolkit.
+> Official Express middleware for the LimitLayer rate limiting toolkit.
 
-`@limitlayer/express` provides a simple, type-safe way to add configurable rate limiting to Express applications. Built on top of `@limitlayer/core`, it supports multiple rate-limiting algorithms, pluggable storage adapters, automatic rate-limit headers, and a consistent developer experience.
+`@limitlayer/express` makes it easy to add fast, configurable, and production-ready rate limiting to Express applications. Built on top of `@limitlayer/core`, it supports multiple rate-limiting algorithms, Redis-backed distributed deployments, automatic HTTP rate-limit headers, and flexible per-route configuration.
 
-Whether you're protecting authentication routes, REST APIs, payment endpoints, search APIs, or webhooks, LimitLayer lets you apply the most appropriate algorithm to each route.
+Whether you're protecting authentication endpoints, REST APIs, payment services, search APIs, webhooks, or internal services, LimitLayer lets every route use the rate-limiting strategy that best fits its traffic patterns.
 
 ---
 
-## Features
+# ✨ Features
+
+### Express Middleware
 
 - 🚀 Official Express middleware
 - ⚡ Built on top of `@limitlayer/core`
-- 🎯 Per-route rate-limiting configuration
-- 🧩 Multiple rate-limiting algorithms
-- 💾 MemoryStore and RedisStore support
+- 🎯 Per-route algorithm selection
+- 🔑 Custom key generators
+- 💾 MemoryStore & RedisStore support
+- 🌐 Distributed rate limiting with Redis
+- 📋 Legacy and RFC 9333 RateLimit headers
+- 🔒 Automatic `429 Too Many Requests` responses
+- 🛠 Fully typed TypeScript API
+- 📦 ESM + CommonJS support
+
+### Built-in Algorithms
+
 - ✅ Fixed Window
 - ✅ Sliding Window
 - ✅ Token Bucket
 - ✅ Sliding Log
 - ✅ Leaky Bucket
-- 📋 Standard RateLimit response headers
-- 🔒 Automatic `429 Too Many Requests` responses
-- 📦 ESM + CommonJS support
-- 🛠 Fully typed with TypeScript
 
 ---
 
-## Installation
+# 📦 Installation
+
+Install the middleware:
 
 ```bash
 npm install express @limitlayer/core @limitlayer/express
 ```
 
-For distributed deployments with Redis:
+For distributed deployments:
 
 ```bash
 npm install redis
@@ -41,19 +49,25 @@ npm install redis
 
 ---
 
-## Quick Start
+# ⚡ Quick Start
 
 ```ts
 import express from "express";
 
-import { MemoryStore } from "@limitlayer/core";
-import { limitLayer } from "@limitlayer/express";
+import {
+  MemoryStore,
+} from "@limitlayer/core";
+
+import {
+  limitLayer,
+} from "@limitlayer/express";
 
 const app = express();
 
 app.use(
   limitLayer({
     storage: new MemoryStore(),
+
     rules: [
       {
         path: "/login",
@@ -102,7 +116,7 @@ app.listen(3000, () => {
 
 ---
 
-## Redis Example
+# 🌐 Distributed Rate Limiting with Redis
 
 ```ts
 import express from "express";
@@ -120,8 +134,9 @@ const app = express();
 app.use(
   limitLayer({
     storage: new RedisStore({
-      url: "redis://localhost:6379",
+      url: process.env.REDIS_URL,
     }),
+
     rules: [
       {
         path: "/api/*",
@@ -135,11 +150,51 @@ app.use(
 );
 ```
 
+Using Redis allows multiple Express instances to share the same rate-limiting state, making LimitLayer ideal for horizontally scaled applications and load-balanced deployments.
+
 ---
 
-## Response Headers
+# 🔑 Custom Key Generator
 
-The middleware automatically sets standard rate-limit headers for every request.
+Rate limit requests by IP address, user ID, tenant, API key, session, or any custom identifier.
+
+```ts
+app.use(
+  limitLayer({
+    storage: new MemoryStore(),
+
+    rules: [
+      {
+        path: "/api/*",
+        algorithm: "token-bucket",
+        limit: 100,
+        window: "1m",
+
+        keyGenerator(request) {
+          return request.headers["x-api-key"] as string;
+        },
+      },
+    ],
+  })
+);
+```
+
+Example identifiers:
+
+- User ID
+- API Key
+- Organization ID
+- Tenant ID
+- Session ID
+- IP Address
+
+---
+
+# 📋 Rate Limit Headers
+
+LimitLayer automatically returns rate-limit headers with every request.
+
+### Legacy Headers
 
 ```text
 X-RateLimit-Limit
@@ -148,26 +203,40 @@ X-RateLimit-Reset
 Retry-After
 ```
 
-These headers make it easy for API clients to understand their current rate-limit status.
+### RFC 9333 Standard Headers
+
+```text
+RateLimit-Limit
+RateLimit-Remaining
+RateLimit-Reset
+Retry-After
+```
+
+You can configure the middleware to send:
+
+- Legacy headers
+- Standard RFC 9333 headers
+- Both formats
+- No headers
 
 ---
 
-## Supported Algorithms
+# 🧠 Supported Algorithms
 
-| Algorithm | Status |
-|-----------|--------|
-| ✅ Fixed Window | Available |
-| ✅ Sliding Window | Available |
-| ✅ Token Bucket | Available |
-| ✅ Sliding Log | Available |
-| ✅ Leaky Bucket | Available |
+| Algorithm | Best For |
+|------------|----------|
+| ✅ Fixed Window | Public REST APIs |
+| ✅ Sliding Window | Authentication & Login |
+| ✅ Token Bucket | Payments & APIs with bursts |
+| ✅ Sliding Log | Search APIs |
+| ✅ Leaky Bucket | Webhooks & Queue-like traffic |
 
 ---
 
-## Storage Adapters
+# 💾 Storage Adapters
 
 | Storage | Status |
-|---------|--------|
+|----------|--------|
 | ✅ MemoryStore | Available |
 | ✅ RedisStore | Available |
 | 🚧 Upstash Redis | Planned |
@@ -176,9 +245,11 @@ These headers make it easy for API clients to understand their current rate-limi
 
 ---
 
-## Why LimitLayer?
+# 🎯 Why LimitLayer?
 
-Different endpoints often require different rate-limiting strategies.
+Most Express rate limiters apply the same algorithm to every endpoint.
+
+LimitLayer allows every route to choose the strategy that best matches its traffic patterns.
 
 ```ts
 rules: [
@@ -217,35 +288,70 @@ rules: [
 ]
 ```
 
-Example use cases:
+Typical recommendations:
 
-- 🔐 Authentication → Sliding Window
-- 💳 Payment APIs → Token Bucket
-- 🔍 Search APIs → Sliding Log
-- 🔄 Webhooks → Leaky Bucket
-- 🌐 General REST APIs → Fixed Window
+| Route | Recommended Algorithm |
+|--------|-----------------------|
+| 🔐 Login & Authentication | Sliding Window |
+| 💳 Payments | Token Bucket |
+| 🔍 Search | Sliding Log |
+| 🔄 Webhooks | Leaky Bucket |
+| 🌐 Public REST APIs | Fixed Window |
 
-This lets you choose the most appropriate rate-limiting strategy for each route while keeping a consistent middleware API.
-
----
-
-## Related Packages
-
-- **@limitlayer/core** — Framework-agnostic rate limiting engine
-- **@limitlayer/express** — Official Express middleware
-
-Additional framework adapters are planned for future releases.
+Every endpoint can use the most suitable rate-limiting strategy while sharing the same middleware, configuration model, and developer experience.
 
 ---
 
-## Documentation
+# 🚀 Production Ready
 
-Complete documentation, examples, contribution guidelines, and the project roadmap are available in the main repository:
+LimitLayer is designed for modern Express applications.
 
-**GitHub:** https://github.com/gargavi-oss/limit-layer
+- Lightweight middleware
+- Async storage adapters
+- Redis support
+- Distributed deployments
+- Per-route algorithms
+- Custom key generators
+- Configurable rate-limit headers
+- Fully typed TypeScript API
 
 ---
 
-## License
+# 📚 Documentation
+
+Complete documentation, examples, architecture guides, storage adapters, and contribution guidelines are available in the main repository.
+
+**GitHub**
+
+https://github.com/gargavi-oss/limit-layer
+
+---
+
+# 📦 Related Packages
+
+| Package | Description |
+|----------|-------------|
+| **@limitlayer/core** | Framework-agnostic rate limiting engine |
+| **@limitlayer/express** | Official Express middleware |
+
+Additional adapters for Fastify, Hono, Koa, NestJS, and other frameworks are planned.
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome.
+
+Whether you're fixing bugs, improving documentation, implementing new algorithms, adding storage adapters, or building framework integrations, your contributions are appreciated.
+
+Please read the contribution guidelines before opening a Pull Request.
+
+---
+
+# 📄 License
 
 MIT
+
+---
+
+Built with ❤️ in TypeScript.

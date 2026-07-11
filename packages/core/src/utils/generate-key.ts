@@ -9,5 +9,5 @@ export async function generateKey(
     return await rule.keyGenerator(request);
   }
 
-  return request.ip;
+  return `${request.method}:${request.path}:${request.ip}`;
 }

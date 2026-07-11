@@ -1,6 +1,6 @@
 {
   "name": "@limitlayer/core",
-  "version": "0.2.0-alpha.2",
+  "version": "0.2.0-alpha.3",
   "private": false,
   "description": "Framework-agnostic rate limiting engine for Node.js and TypeScript supporting Fixed Window, Sliding Window, Token Bucket, Sliding Log, Leaky Bucket, MemoryStore, and RedisStore.",
   "license": "MIT",
