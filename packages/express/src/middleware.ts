@@ -66,7 +66,11 @@ export function limitLayer(
       }
 
       // Apply rate-limit headers
-      applyHeaders(res, result);
+      applyHeaders(
+  res,
+  result,
+  options.headerMode ?? "both"
+);
 
       // Allowed
       if (result.allowed) {

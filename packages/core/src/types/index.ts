@@ -6,3 +6,4 @@ export * from "./algorithm.js";
 export * from "./config.js";
 export * from "./state.js";
 export * from "./errors.js";
+export * from "./header-mode.js"
