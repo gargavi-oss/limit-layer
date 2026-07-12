@@ -77,17 +77,25 @@ export function limitLayer(
         return next();
       }
 
-      // Optional callback
-      if (options.onLimitReached) {
-        await options.onLimitReached(res, result);
-      }
 
-      // Default response
-      return res.status(statusCode).json({
-        error: "Too Many Requests",
-        message: "Rate limit exceeded.",
-        retryAfter: result.retryAfter,
-      });
+if (options.onLimitReached) {
+  await options.onLimitReached(res, result);
+}
+
+if (options.onRejected) {
+  await options.onRejected(req, res, result);
+
+  if (res.headersSent) {
+    return;
+  }
+}
+
+// Default response
+return res.status(statusCode).json({
+  error: "Too Many Requests",
+  message: "Rate limit exceeded.",
+  retryAfter: result.retryAfter,
+});
     } catch (error) {
       next(error);
     }

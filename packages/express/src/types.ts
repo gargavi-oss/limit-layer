@@ -1,4 +1,4 @@
-import type { Response } from "express";
+import type { Request, Response } from "express";
 import type { DecisionResult, HeaderMode } from "@limitlayer/core";
 
 
@@ -45,4 +45,10 @@ export interface ExpressOptions {
     response: Response,
     result: DecisionResult
   ) => void | Promise<void>;
+
+  onRejected?: (
+  request: Request,
+  response: Response,
+  result: DecisionResult
+) => void | Promise<void>;
 }
