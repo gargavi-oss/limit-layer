@@ -7,6 +7,10 @@ export type AlgorithmType =
   | "token-bucket"
   | "leaky-bucket";
 
+export type SkipFunction =
+  (request: LLRequest) =>
+    boolean | Promise<boolean>;
+
 export type TimeWindow = number | `${number}${"ms" | "s" | "m" | "h" | "d"}`;
 
 export interface Rule {
@@ -35,4 +39,5 @@ export interface Rule {
   skip?: (request: LLRequest) => boolean | Promise<boolean>;
 
   metadata?: Record<string, unknown>;
+
 }

@@ -1,5 +1,5 @@
 import { LLRequest } from "./request.js";
-import type { Rule } from "./rule.js";
+import type { Rule, SkipFunction } from "./rule.js";
 import type { StorageAdapter } from "./storage.js";
 
 export interface AnalyticsConfig {
@@ -30,4 +30,6 @@ export interface LimitLayerConfig {
   analytics?: {
     enabled: boolean;
   };
+
+  skip? : SkipFunction
 }

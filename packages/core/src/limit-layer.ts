@@ -110,6 +110,15 @@ async consume(
 
     return null;
   }
+  if (rule.skip !== undefined) {
+    if (await rule.skip(request)) {
+        return null;
+    }
+} else if (this.config.skip) {
+    if (await this.config.skip(request)) {
+        return null;
+    }
+}
 
   return this.engine.consume(
     request,
